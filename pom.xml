@@ -102,7 +102,7 @@
 				</executions>
 				<configuration>
 					<nodeVersion>v18.16.0</nodeVersion>
-					<workingDirectory>notes-frontend</workingDirectory>
+					<workingDirectory>fit-frontend</workingDirectory>
 				</configuration>
 			</plugin>
 			<!--	copy react build artifacts to spring boot	-->
@@ -121,7 +121,7 @@
 							<outputDirectory>target/classes/static</outputDirectory>
 							<resources>
 								<resource>
-									<directory>notes-frontend/build</directory>
+									<directory>fit-frontend/build</directory>
 									<filtering>true</filtering>
 								</resource>
 							</resources>
