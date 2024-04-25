@@ -10,8 +10,8 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 @Configuration
 public class MyDataRestConfig implements RepositoryRestConfigurer {
 
-//    private String allowedOrigins = "https://react-note-taker-63f583016776.herokuapp.com";
-    private String allowedOrigins = "http://localhost:3000";
+    private String allowedOrigins = "http://fitapp.us-east-2.elasticbeanstalk.com";
+//    private String allowedOrigins = "http://localhost:3000";
 
 
     @Override

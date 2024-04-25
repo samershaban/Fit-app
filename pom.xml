@@ -15,7 +15,7 @@
 	<name>fit-app</name>
 	<description>Notes Application</description>
 	<properties>
-		<java.version>18</java.version>
+		<java.version>17</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -58,6 +58,7 @@
 						<exclude>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
+<!--							<version>1.18.30</version>-->
 						</exclude>
 					</excludes>
 				</configuration>
