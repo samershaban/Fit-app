@@ -15,12 +15,11 @@ import FormLabel from '@mui/material/FormLabel';
 import { Checkbox, Container, FilledInput, FormGroup, Grid, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 
-import {IMaskInput} from 'react-imask';
-import { NumericFormat } from 'react-number-format';
 import PropTypes from 'prop-types';
 import Stack from '@mui/material/Stack';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
+import { Routine } from './Routine';
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
@@ -29,7 +28,7 @@ export const Homepage = () => {
   const { authState } = useOktaAuth();
 
   //Active step
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = React.useState(2);
   const [skipped, setSkipped] = React.useState(new Set());
 
   const isStepOptional = (step) => {
@@ -86,31 +85,6 @@ export const Homepage = () => {
   const [inches, setInches] = React.useState('0');
   const [weight, setWeight] = React.useState('');
 
-  const [daysPerWeek, setDaysPerWeek] = React.useState('');
-  const [time, setTime] = React.useState('');
-
-  // Workouts Check boxes
-  const [state, setState] = React.useState({
-    general: true,
-    strength: false,
-    bodybuilding: false,
-    calisthenics: false,
-  });
-  
-  const handleChange = (event) => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  const { strength, bodybuilding, calisthenics, general } = state;
-  const error = [general, strength, bodybuilding, calisthenics].filter((v) => v).length > 2;
-
-  useEffect(() => {
-    console.log(weight)
-  }, [weight]);
-
   const handleChangeFeet = (e) => {
     setFeet(e.target.value);
   };
@@ -126,12 +100,36 @@ export const Homepage = () => {
     setWeight(e.target.value);
   };
 
+  // Workouts Check boxes
+  const [daysPerWeek, setDaysPerWeek] = React.useState('');
+  const [minutes, setMinutes] = React.useState('');
+  
+  //Routine info
+  const [workouts, setWorkouts] = React.useState({
+    general: true,
+    strength: false,
+    bodybuilding: false,
+    calisthenics: false,
+  });
+
+  const handleChangeWorkouts = (event) => {
+    setWorkouts({
+      ...workouts,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  // Main Code
+  useEffect(() => {
+    console.log(weight)
+  }, [weight]);
+
   const handleChangeDPW = (e) => {
     setDaysPerWeek(e.target.value);
   };
 
-  const handleChangeTime = (e) => {
-    setTime(e.target.value);
+  const handleChangeMin = (e) => {
+    setMinutes(e.target.value);
   };
 
   return(
@@ -322,105 +320,16 @@ export const Homepage = () => {
         </React.Fragment>
       ) : (<></>)}
 
-
       {activeStep === 2 ? (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step 3: Lets finalize your routine</Typography>
-          <Container fixed sx={{ margin: 0 }} >
-            <Box sx={{ height: '300px' }}>
-            <Box sx={{ flexGrow: 1 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-              <Typography sx={{ mt: 1, mb: 1 }}>How many days per week can you commit?</Typography>
-              <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Days</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    size='2' 
-                    sx={{ m: 1, width: '25ch' }}
-                    InputProps={{
-                      endAdornment: <InputAdornment position="start">days</InputAdornment>,
-                    }}
-                    value={daysPerWeek}
-                    // label="Days"
-                    onChange={handleChangeDPW}
-                  >
-                    {/* <MenuItem value={1}>1 Day</MenuItem> */}
-                    <MenuItem value={2}>2 Days</MenuItem>
-                    <MenuItem value={3}>3 Days</MenuItem>
-                    <MenuItem value={4}>4 Days</MenuItem>
-                    <MenuItem value={5}>5 Days</MenuItem>
-                  </Select>
-                </FormControl>
-
-              <Typography sx={{ mt: 1, mb: 1 }}>How long per session?</Typography>
-              <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Minutes</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    size='2'
-                    sx={{ m: 1, width: '25ch' }}
-                    InputProps={{
-                      // endAdornment: <InputAdornment position="start">time</InputAdornment>,
-                    }}
-                    value={time}
-                    // // label="Feet"
-                    onChange={handleChangeTime}
-                  >
-                    {/* <MenuItem value={1}>1 Day</MenuItem> */}
-                    <MenuItem value={30}>30 Min</MenuItem>
-                    <MenuItem value={45}>45 Min</MenuItem>
-                    <MenuItem value={60}>60 Min</MenuItem>
-                  </Select>
-                </FormControl>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography sx={{ mt: 1, mb: 1 }}>What Workouts Interest you?</Typography>
-                  <Box sx={{ display: 'flex' }}>
-                      <FormControl
-                        required
-                        error={error}
-                        component="fieldset"
-                        sx={{ m: 3 }}
-                        variant="standard"
-                      >
-                      {/* <FormLabel component="legend">Pick two</FormLabel> */}
-                      <FormGroup>
-                        <FormControlLabel
-                            control={
-                              <Checkbox checked={general} onChange={handleChange} name="general" />
-                            }
-                            label="General Fitness"
-                          />
-                        <FormControlLabel
-                          control={
-                            <Checkbox checked={strength} onChange={handleChange} name="strength" />
-                          }
-                          label="Strength Training"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox checked={bodybuilding} onChange={handleChange} name="bodybuilding" />
-                          }
-                          label="Bodybuilding"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox checked={calisthenics} onChange={handleChange} name="calisthenics" />
-                          }
-                          label="Calisthenics"
-                        />
-                      </FormGroup>
-                      <FormHelperText>Pick up to two*</FormHelperText>
-                    </FormControl>
-                  </Box>
-                </Grid>
-            </Grid> 
-            </Box>
-            </Box>
-          </Container>
+          <Routine 
+            daysPerWeek={daysPerWeek} 
+            handleChangeDPW={handleChangeDPW}
+            minutes={minutes}
+            handleChangeMin={handleChangeMin}
+            workouts={workouts}
+            handleChange={handleChangeWorkouts}>
+          </Routine>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
