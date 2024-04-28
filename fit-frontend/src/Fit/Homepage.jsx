@@ -12,7 +12,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { Checkbox, Container, FilledInput, FormGroup, Grid, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
+import { Checkbox, Container, FilledInput, FormGroup, Grid, InputAdornment, LinearProgress, MenuItem, Select, TextField } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 
 import PropTypes from 'prop-types';
@@ -20,6 +20,7 @@ import Stack from '@mui/material/Stack';
 import Input from '@mui/material/Input';
 import InputLabel from '@mui/material/InputLabel';
 import { Routine } from './Routine';
+import { BasicInfo } from './BasicInfo';
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
@@ -104,7 +105,7 @@ export const Homepage = () => {
   const [daysPerWeek, setDaysPerWeek] = React.useState('');
   const [minutes, setMinutes] = React.useState('');
   
-  //Routine info
+  // Routine info
   const [workouts, setWorkouts] = React.useState({
     general: true,
     strength: false,
@@ -119,11 +120,6 @@ export const Homepage = () => {
     });
   };
 
-  // Main Code
-  useEffect(() => {
-    console.log(weight)
-  }, [weight]);
-
   const handleChangeDPW = (e) => {
     setDaysPerWeek(e.target.value);
   };
@@ -131,6 +127,34 @@ export const Homepage = () => {
   const handleChangeMin = (e) => {
     setMinutes(e.target.value);
   };
+
+  // Generating Routine 
+  const [progress, setProgress] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((oldProgress) => {
+        // if (oldProgress === 100) {
+        //   return 0;
+        // }
+        const diff = Math.random() * 20;
+        return Math.min(oldProgress + diff, 100);
+      });
+    }, 500);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+  // fix glitch
+  useEffect(() => {
+    setProgress(0);
+  }, [activeStep]);
+
+  // Main Code
+  useEffect(() => {
+    console.log(weight)
+  }, [weight]);
 
   return(
     <div className="container mt-3">
@@ -158,23 +182,30 @@ export const Homepage = () => {
         })}
       </Stepper>
       {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            Generating Routine
-          </Typography>
+        <div className="container mt-3">
+          <Typography sx={{ mt: 2, mb: 1 }}>Generating Routine</Typography>
           <Container fixed sx={{ margin: 0 }} >
             <Box sx={{ height: '300px' }}>
+            <Box sx={{ flexGrow: 1 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <Box sx={{ width: '100%' }}>
+                    <LinearProgress variant="determinate" value={progress} />
+                  </Box>
+                </Grid>
+              </Grid>
+            </Box>
             </Box>
           </Container>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={handleReset}>Reset</Button>
           </Box>
-        </React.Fragment>
+        </div>
       ) : (<></>)}
 
       {activeStep === 0 ? (
-        <React.Fragment>
+        <div className="container mt-3">
           <Typography sx={{ mt: 2, mb: 1 }}>Step 1: What are your goals?</Typography>
           <Container fixed sx={{ margin: 0 }} >
             <Box sx={{ height: '300px' }}>
@@ -213,89 +244,19 @@ export const Homepage = () => {
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
-        </React.Fragment>
+        </div>
       ) : (<></>)}
 
       {activeStep === 1 ? (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step 2: We need some basic info</Typography>
-          <Container fixed sx={{ margin: 0 }} >
-            <Box sx={{ height: '300px' }}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Height</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    size='2'
-                    sx={{ m: 1, width: '25ch' }}
-                    InputProps={{
-                      endAdornment: <InputAdornment position="start">lbs</InputAdornment>,
-                    }}
-                    value={feet}
-                    // label="Feet"
-                    onChange={handleChangeFeet}
-                  >
-                    <MenuItem value={1}>1 ft</MenuItem>
-                    <MenuItem value={2}>2 ft</MenuItem>
-                    <MenuItem value={3}>3 ft</MenuItem>
-                    <MenuItem value={4}>4 ft</MenuItem>
-                    <MenuItem value={5}>5 ft</MenuItem>
-                    <MenuItem value={6}>6 ft</MenuItem>
-                    <MenuItem value={7}>7 ft</MenuItem>
-                  </Select>
-                </FormControl>
-
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Height</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    size='2'
-                    sx={{ m: 1, width: '25ch' }}
-                    InputProps={{
-                      endAdornment: <InputAdornment position="start">lbs</InputAdornment>,
-                    }}
-                    value={inches}
-                    // label="Height"
-                    onChange={handleChangeInches}
-                  >
-                    <MenuItem value={0}>0 in</MenuItem>
-                    <MenuItem value={1}>1 in</MenuItem>
-                    <MenuItem value={2}>2 in</MenuItem>
-                    <MenuItem value={3}>3 in</MenuItem>
-                    <MenuItem value={4}>4 in</MenuItem>
-                    <MenuItem value={5}>5 in</MenuItem>
-                    <MenuItem value={6}>6 in</MenuItem>
-                    <MenuItem value={7}>7 in</MenuItem>
-                    <MenuItem value={8}>8 in</MenuItem>
-                    <MenuItem value={9}>9 in</MenuItem>
-                    <MenuItem value={10}>10 in</MenuItem>
-                    <MenuItem value={11}>11 in</MenuItem>
-                  </Select>
-                </FormControl>
-
-                <FormControl fullWidth>
-                  <TextField
-                    label="Weight"
-                    // id="outlined-start-adornment"
-                    id="demo-simple-select-label"
-                    value={weight}
-                    size='2'
-                    sx={{ m: 1, width: '22.2ch' }}
-                    onKeyDown={(evt) => ["e", "E", "+", "-", "."].includes(evt.key) && evt.preventDefault()}
-                    inputProps={{
-                      endadornment: <InputAdornment position="start">lbs</InputAdornment>,
-                      type: 'number',
-                      min: 0,
-                      max: 999,
-                      length: 3
-                    }}
-                    onChange={handleChangeWeight}
-                  />
-                </FormControl>
-                <Typography sx={{ mt: 2, mb: 1 }} >Your BMI is:</Typography>
-            </Box>
-          </Container>
+          <BasicInfo
+            feet={feet}
+            handleChangeFeet={handleChangeFeet}
+            inches={inches}
+            handleChangeInches={handleChangeInches}
+            weight={weight}
+            handleChangeWeight={handleChangeWeight}
+          />
           
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
