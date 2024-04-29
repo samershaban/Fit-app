@@ -9,7 +9,8 @@ import {Dashboard} from './Fit/Dashboard';
 import { oktaConfig } from './lib/oktaConfig';
 import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
 import { LoginCallback, SecureRoute, Security } from '@okta/okta-react';
-import { Homepage } from './Fit/Homepage';
+import { StartPage } from './Fit/Start/StartPage';
+import { Routine } from './Fit/Routine';
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -43,8 +44,11 @@ function App() {
             <Route path='/' exact>
               <Redirect to='home'/>
             </Route>
-            <Route path='/home'>
-              <Homepage/>
+            <Route path='/start'>
+              <StartPage/>
+            </Route>
+            <Route path='/routine'>
+              <Routine/>
             </Route>
             <Route path='/dashboard'>
               <Dashboard/>

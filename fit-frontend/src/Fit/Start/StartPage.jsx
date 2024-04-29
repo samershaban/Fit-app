@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useOktaAuth } from "@okta/okta-react";
 import { Link } from "react-router-dom"
 import Box from '@mui/material/Box';
@@ -7,29 +7,19 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { FilledInput, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
-import FormHelperText from '@mui/material/FormHelperText';
 
-import {IMaskInput} from 'react-imask';
-import { NumericFormat } from 'react-number-format';
-import PropTypes from 'prop-types';
-import Stack from '@mui/material/Stack';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
-
+import { Goals } from './Goals';
+import { BasicInfo } from './BasicInfo';
+import { Schedule } from './Schedule';
+import { Finished } from './Finished';
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
-// Homepage Component
-export const Homepage = () => {
+// Main Component
+export const StartPage = () => {
 
   const { authState } = useOktaAuth();
 
-  //active step
+  //Active step
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
@@ -75,17 +65,64 @@ export const Homepage = () => {
     setActiveStep(0);
   };
 
-  // info
-  const [height, setHeight] = React.useState('');
+  // Goal Radio box
+  const [goal, setGoal] = React.useState('maintain');
+
+  const handleChangeGoal = (event) => {
+    setGoal(event.target.value);
+  };
+
+  // Basic Info
+  const [feet, setFeet] = React.useState('5');
+  const [inches, setInches] = React.useState('0');
   const [weight, setWeight] = React.useState('');
 
-  const handleChangeHeight = (event) => {
-    setHeight(event.target.value);
+  const handleChangeFeet = (e) => {
+    setFeet(e.target.value);
   };
 
-  const handleChangeWeight = (event) => {
-    setWeight(event.target.value);
+  const handleChangeInches = (e) => {
+    setInches(e.target.value);
   };
+
+  const handleChangeWeight = (e) => {
+    if(e.target.value < 0){
+      (e.target.value = 0)
+    }
+    setWeight(e.target.value);
+  };
+
+  // Workouts Check boxes
+  const [daysPerWeek, setDaysPerWeek] = React.useState('');
+  const [minutes, setMinutes] = React.useState('');
+  
+  // Routine info
+  const [workouts, setWorkouts] = React.useState({
+    general: true,
+    strength: false,
+    bodybuilding: false,
+    calisthenics: false,
+  });
+
+  const handleChangeWorkouts = (event) => {
+    setWorkouts({
+      ...workouts,
+      [event.target.name]: event.target.checked,
+    });
+  };
+
+  const handleChangeDPW = (e) => {
+    setDaysPerWeek(e.target.value);
+  };
+
+  const handleChangeMin = (e) => {
+    setMinutes(e.target.value);
+  };
+
+  // Main Code
+  useEffect(() => {
+    console.log(weight)
+  }, [weight]);
 
   return(
     <div className="container mt-3">
@@ -113,32 +150,22 @@ export const Homepage = () => {
         })}
       </Stepper>
       {activeStep === steps.length ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you're finished
-          </Typography>
+        <div className="container mt-3">
+          <Finished
+            activeStep={activeStep}
+          />
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={handleReset}>Reset</Button>
           </Box>
-        </React.Fragment>
-      ) : (<div></div>)}
+        </div>
+      ) : (<></>)}
 
       {activeStep === 0 ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step 1: What are your goals?</Typography>
-          <FormControl>
-            <FormLabel id="demo-radio-buttons-group-label">Goals</FormLabel>
-            <RadioGroup
-              aria-labelledby="demo-radio-buttons-group-label"
-              defaultValue="female"
-              name="radio-buttons-group"
-            >
-              <FormControlLabel value="Loose" control={<Radio />} label="Loose Weight" />
-              <FormControlLabel value="Maintain" control={<Radio />} label="Maintain Weight" />
-              <FormControlLabel value="Gain" control={<Radio />} label="Gain Lean Weight" />
-            </RadioGroup>
-          </FormControl>
+        <div className="container mt-3">
+          <Goals
+            goal={goal}
+            handleChangeGoal={handleChangeGoal}/>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
@@ -159,63 +186,18 @@ export const Homepage = () => {
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
-        </React.Fragment>
-      ) : (<div></div>)}
+        </div>
+      ) : (<></>)}
 
       {activeStep === 1 ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step 2: We need some basic info</Typography>
-          <Stack direction="row" spacing={0}>
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Height</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                size='2'
-                sx={{ m: 1, width: '25ch' }}
-                InputProps={{
-                  endAdornment: <InputAdornment position="start">lbs</InputAdornment>,
-                }}
-                value={height}
-                label="Height"
-                onChange={handleChangeHeight}
-              >
-                <MenuItem value={4}>4 ft</MenuItem>
-                <MenuItem value={5}>5 ft</MenuItem>
-                <MenuItem value={6}>6 ft</MenuItem>
-              </Select>
-            </FormControl>
-
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Height</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                size='2'
-                sx={{ m: 1, width: '25ch' }}
-                InputProps={{
-                  endAdornment: <InputAdornment position="start">lbs</InputAdornment>,
-                }}
-                value={height}
-                label="Height"
-                onChange={handleChangeHeight}
-              >
-                <MenuItem value={0}>0 in</MenuItem>
-                <MenuItem value={1}>1 in</MenuItem>
-                <MenuItem value={2}>2 in</MenuItem>
-                <MenuItem value={3}>3 in</MenuItem>
-              </Select>
-            </FormControl>
-          </Stack>
-          <br/>
-          <TextField
-            label="Weight"
-            id="outlined-start-adornment"
-            size='2'
-            sx={{ m: 1, width: '25ch' }}
-            InputProps={{
-              endAdornment: <InputAdornment position="start">lbs</InputAdornment>,
-            }}
+        <div className="container mt-3">
+          <BasicInfo
+            feet={feet}
+            handleChangeFeet={handleChangeFeet}
+            inches={inches}
+            handleChangeInches={handleChangeInches}
+            weight={weight}
+            handleChangeWeight={handleChangeWeight}
           />
           
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
@@ -233,18 +215,23 @@ export const Homepage = () => {
                 Skip
               </Button>
             )}
-
             <Button onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
-        </React.Fragment>
-      ) : (<div></div>)}
-
+        </div>
+      ) : (<></>)}
 
       {activeStep === 2 ? (
-        <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>Step 3: Lets finalize your routine</Typography>
+        <div className="container mt-3">
+          <Schedule 
+            daysPerWeek={daysPerWeek} 
+            handleChangeDPW={handleChangeDPW}
+            minutes={minutes}
+            handleChangeMin={handleChangeMin}
+            workouts={workouts}
+            handleChange={handleChangeWorkouts}>
+          </Schedule>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
@@ -260,13 +247,13 @@ export const Homepage = () => {
                 Skip
               </Button>
             )}
-
             <Button onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
-        </React.Fragment>
-      ) : (<div></div>)}
+        </div>
+      ) : (<></>)}
+
     </Box>
       {authState?.isAuthenticated ?
       <>
