@@ -1,6 +1,3 @@
-import React, { useEffect, useRef } from 'react';
-import { useOktaAuth } from "@okta/okta-react";
-import { Link } from "react-router-dom"
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';

@@ -1,15 +1,12 @@
-import React, { useEffect, useRef } from 'react';
-import { useOktaAuth } from "@okta/okta-react";
-import { Link } from "react-router-dom"
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import { Checkbox, Container, FilledInput, FormGroup, Grid, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
+import { Checkbox, Container, FormGroup, Grid, InputAdornment, MenuItem, Select } from '@mui/material';
 import FormHelperText from '@mui/material/FormHelperText';
 
 import InputLabel from '@mui/material/InputLabel';
-const steps = ['Goals', 'Basic Info', 'Routine'];
 
 export const Schedule = ({daysPerWeek, handleChangeDPW, minutes, handleChangeMin, workouts, handleChange}) => {
 

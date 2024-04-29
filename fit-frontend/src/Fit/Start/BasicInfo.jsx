@@ -1,14 +1,9 @@
-import React, { useEffect, useRef } from 'react';
-import { useOktaAuth } from "@okta/okta-react";
-import { Link } from "react-router-dom"
+import React from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
-import { Container, FilledInput, FormGroup, Grid, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
-import FormHelperText from '@mui/material/FormHelperText';
-
+import { Container, Grid, InputAdornment, MenuItem, Select, TextField } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
-const steps = ['Goals', 'Basic Info', 'Routine'];
 
 export const BasicInfo = ({feet, handleChangeFeet, inches, handleChangeInches, weight, handleChangeWeight}) => {
 

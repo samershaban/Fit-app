@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { useOktaAuth } from "@okta/okta-react";
 import { Link } from "react-router-dom"
 import Box from '@mui/material/Box';
@@ -7,12 +7,6 @@ import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import { Checkbox, Container } from '@mui/material';
 
 import { Goals } from './Goals';
 import { BasicInfo } from './BasicInfo';
