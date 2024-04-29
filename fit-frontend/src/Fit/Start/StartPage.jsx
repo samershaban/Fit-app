@@ -14,19 +14,19 @@ import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
 import { Checkbox, Container } from '@mui/material';
 
-import { Routine } from './Routine';
-import { BasicInfo } from './BasicInfo';
-import { Finished } from './Finished';
 import { Goals } from './Goals';
+import { BasicInfo } from './BasicInfo';
+import { Schedule } from './Schedule';
+import { Finished } from './Finished';
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
-export const Homepage = () => {
+export const StartPage = () => {
 
   const { authState } = useOktaAuth();
 
   //Active step
-  const [activeStep, setActiveStep] = React.useState(2);
+  const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
   const isStepOptional = (step) => {
@@ -230,14 +230,14 @@ export const Homepage = () => {
 
       {activeStep === 2 ? (
         <div className="container mt-3">
-          <Routine 
+          <Schedule 
             daysPerWeek={daysPerWeek} 
             handleChangeDPW={handleChangeDPW}
             minutes={minutes}
             handleChangeMin={handleChangeMin}
             workouts={workouts}
             handleChange={handleChangeWorkouts}>
-          </Routine>
+          </Schedule>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
