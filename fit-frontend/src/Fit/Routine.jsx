@@ -17,11 +17,10 @@ export const Routine = ({daysPerWeek, handleChangeDPW, minutes, handleChangeMin,
   const error = [general, strength, bodybuilding, calisthenics].filter((v) => v).length > 2;
 
   return(
-    <div className="container mt-3">
+    <>
       <Typography sx={{ mt: 2, mb: 1 }}>Step 3: Lets finalize your routine</Typography>
       <Container fixed sx={{ margin: 0 }} >
         <Box sx={{ height: '300px' }}>
-        <Box sx={{ flexGrow: 1 }}>
         <Grid container spacing={2}>
           <Grid item xs={6}>
           <Typography sx={{ mt: 1, mb: 1 }}>How many days per week can you commit?</Typography>
@@ -110,10 +109,9 @@ export const Routine = ({daysPerWeek, handleChangeDPW, minutes, handleChangeMin,
                 </FormControl>
               </Box>
             </Grid>
-        </Grid> 
-        </Box>
+        </Grid>
         </Box>
       </Container>
-    </div>
+    </>
   )
 }

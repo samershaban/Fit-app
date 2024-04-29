@@ -12,15 +12,12 @@ import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
 import FormLabel from '@mui/material/FormLabel';
-import { Checkbox, Container, FilledInput, FormGroup, Grid, InputAdornment, LinearProgress, MenuItem, Select, TextField } from '@mui/material';
-import FormHelperText from '@mui/material/FormHelperText';
+import { Checkbox, Container } from '@mui/material';
 
-import PropTypes from 'prop-types';
-import Stack from '@mui/material/Stack';
-import Input from '@mui/material/Input';
-import InputLabel from '@mui/material/InputLabel';
 import { Routine } from './Routine';
 import { BasicInfo } from './BasicInfo';
+import { Finished } from './Finished';
+import { Goals } from './Goals';
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
@@ -128,29 +125,6 @@ export const Homepage = () => {
     setMinutes(e.target.value);
   };
 
-  // Generating Routine 
-  const [progress, setProgress] = React.useState(0);
-
-  React.useEffect(() => {
-    const timer = setInterval(() => {
-      setProgress((oldProgress) => {
-        // if (oldProgress === 100) {
-        //   return 0;
-        // }
-        const diff = Math.random() * 20;
-        return Math.min(oldProgress + diff, 100);
-      });
-    }, 500);
-
-    return () => {
-      clearInterval(timer);
-    };
-  }, []);
-  // fix glitch
-  useEffect(() => {
-    setProgress(0);
-  }, [activeStep]);
-
   // Main Code
   useEffect(() => {
     console.log(weight)
@@ -183,20 +157,9 @@ export const Homepage = () => {
       </Stepper>
       {activeStep === steps.length ? (
         <div className="container mt-3">
-          <Typography sx={{ mt: 2, mb: 1 }}>Generating Routine</Typography>
-          <Container fixed sx={{ margin: 0 }} >
-            <Box sx={{ height: '300px' }}>
-            <Box sx={{ flexGrow: 1 }}>
-              <Grid container spacing={2}>
-                <Grid item xs={12}>
-                  <Box sx={{ width: '100%' }}>
-                    <LinearProgress variant="determinate" value={progress} />
-                  </Box>
-                </Grid>
-              </Grid>
-            </Box>
-            </Box>
-          </Container>
+          <Finished
+            activeStep={activeStep}
+          />
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
             <Button onClick={handleReset}>Reset</Button>
@@ -206,24 +169,9 @@ export const Homepage = () => {
 
       {activeStep === 0 ? (
         <div className="container mt-3">
-          <Typography sx={{ mt: 2, mb: 1 }}>Step 1: What are your goals?</Typography>
-          <Container fixed sx={{ margin: 0 }} >
-            <Box sx={{ height: '300px' }}>
-              <FormControl>
-                <FormLabel id="demo-radio-buttons-group-label">Goal</FormLabel>
-                <RadioGroup
-                  aria-labelledby="demo-radio-buttons-group-label"
-                  value={goal}
-                  onChange={handleChangeGoal}
-                  name="radio-buttons-group"
-                >
-                  <FormControlLabel value="loose" control={<Radio />} label="Loose Weight" />
-                  <FormControlLabel value="maintain" control={<Radio />} label="Maintain Weight" />
-                  <FormControlLabel value="gain" control={<Radio />} label="Gain Lean Weight" />
-                </RadioGroup>
-              </FormControl>
-            </Box>
-          </Container>
+          <Goals
+            goal={goal}
+            handleChangeGoal={handleChangeGoal}/>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button
               color="inherit"
@@ -248,7 +196,7 @@ export const Homepage = () => {
       ) : (<></>)}
 
       {activeStep === 1 ? (
-        <React.Fragment>
+        <div className="container mt-3">
           <BasicInfo
             feet={feet}
             handleChangeFeet={handleChangeFeet}
@@ -273,16 +221,15 @@ export const Homepage = () => {
                 Skip
               </Button>
             )}
-
             <Button onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
-        </React.Fragment>
+        </div>
       ) : (<></>)}
 
       {activeStep === 2 ? (
-        <React.Fragment>
+        <div className="container mt-3">
           <Routine 
             daysPerWeek={daysPerWeek} 
             handleChangeDPW={handleChangeDPW}
@@ -306,12 +253,11 @@ export const Homepage = () => {
                 Skip
               </Button>
             )}
-
             <Button onClick={handleNext}>
               {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
             </Button>
           </Box>
-        </React.Fragment>
+        </div>
       ) : (<></>)}
 
     </Box>
