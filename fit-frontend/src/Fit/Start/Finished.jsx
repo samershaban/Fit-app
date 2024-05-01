@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
+import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
-
+import { output } from '../WorkoutService'
+import { Workout } from '../Workout';
 // Table
 function createData(mon, tues, wed, thurs, fri, sat) {
   return { mon, tues, wed, thurs, fri, sat };
@@ -59,37 +60,42 @@ export const Finished = ({activeStep}) => {
           </Grid>
         {/* </Box> */}
         <br/>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Mon</TableCell>
-                <TableCell align="right">Tues</TableCell>
-                <TableCell align="right">Wed</TableCell>
-                <TableCell align="right">Thurs</TableCell>
-                <TableCell align="right">Fri</TableCell>
-                <TableCell align="right">Sat</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows.map((row) => (
-                <TableRow
-                  key={row.name}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.mon}
-                  </TableCell>
-                  <TableCell align="right">{row.tues}</TableCell>
-                  <TableCell align="right">{row.wed}</TableCell>
-                  <TableCell align="right">{row.thurs}</TableCell>
-                  <TableCell align="right">{row.fri}</TableCell>
-                  <TableCell align="right">{row.sat}</TableCell>
+        <Button onClick={output}>output</Button>
+        {progress >=100? 
+        <>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Mon</TableCell>
+                  <TableCell align="right">Tues</TableCell>
+                  <TableCell align="right">Wed</TableCell>
+                  <TableCell align="right">Thurs</TableCell>
+                  <TableCell align="right">Fri</TableCell>
+                  <TableCell align="right">Sat</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+              </TableHead>
+              <TableBody>
+                {rows.map((row, i) => (
+                  <TableRow
+                    key={i}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.mon}
+                    </TableCell>
+                    <TableCell align="right">{row.tues}</TableCell>
+                    <TableCell align="right">{row.wed}</TableCell>
+                    <TableCell align="right">{row.thurs}</TableCell>
+                    <TableCell align="right">{row.fri}</TableCell>
+                    <TableCell align="right">{row.sat}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>:<></>}
+        
         </Box>
       </Container>
     </>

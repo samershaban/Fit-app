@@ -12,6 +12,7 @@ import { Goals } from './Goals';
 import { BasicInfo } from './BasicInfo';
 import { Schedule } from './Schedule';
 import { Finished } from './Finished';
+import { output } from '../WorkoutService'
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
@@ -22,6 +23,8 @@ export const StartPage = () => {
   //Active step
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
+
+  output();
 
   const isStepOptional = (step) => {
     return step === 1;
