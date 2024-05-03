@@ -12,7 +12,8 @@ import { Goals } from './Goals';
 import { BasicInfo } from './BasicInfo';
 import { Schedule } from './Schedule';
 import { Finished } from './Finished';
-import { output } from '../WorkoutService'
+import { WorkoutService, output } from '../WorkoutService'
+import { DailyRoutine } from '../DailyRoutine';
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
@@ -24,7 +25,6 @@ export const StartPage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
-  output();
 
   const isStepOptional = (step) => {
     return step === 1;
@@ -123,9 +123,15 @@ export const StartPage = () => {
   };
 
   // Main Code
+  // useEffect(() => {
+  //   console.log(weight)
+  // }, [weight]);
+
+  // On component render
   useEffect(() => {
-    console.log(weight)
-  }, [weight]);
+    let dr = new DailyRoutine("Push Day", 30, ['chest', 'shoulders', 'triceps']);
+    // dr.getRoutine();
+  })
 
   return(
     <div className="container mt-3">

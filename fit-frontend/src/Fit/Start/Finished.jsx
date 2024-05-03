@@ -3,7 +3,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
-import { output } from '../WorkoutService'
+import { WorkoutService, output } from '../WorkoutService'
 import { Workout } from '../Workout';
 // Table
 function createData(mon, tues, wed, thurs, fri, sat) {
