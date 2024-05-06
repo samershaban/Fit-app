@@ -18,7 +18,7 @@ export let workouts = new Map();
 
   workouts.set('abs', []);
   workouts.set('cardio', []);
-  // Add seperate keys for calisthenics, functional, powerlifting, cardio, mobility
+  // Add seperate keys for calisthenics, functional, powerlifting, at home, cardio, mobility
 
   workouts.get('chest').push(new Workout('Bench Press', 'Chest', ['Strength', 'Hypertrophy']));
   workouts.get('chest').push(new Workout('Incline Bench', 'Chest', ['Strength', 'Hypertrophy']));

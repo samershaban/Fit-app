@@ -8,14 +8,25 @@ export class DailyRoutine {
     this.bodys = bodys;
     this.routine = [];
     // body parts
-    for(let b=0;b<bodys.length;b++){
+    this.createRoutine();
+    // console.log(this.routine);
+    
+    // this.getRoutine();
+  }
+
+  getRoutine = () => {
+    console.log(this.routine);
+  }
+
+  createRoutine = () => {
+    for(let b=0;b<this.bodys.length;b++){
       // console.log(bodys[i]);
-      let body = bodys[b];
+      let body = this.bodys[b];
       let w = workouts.get(body);
       // console.log(w[0]);
 
       // each body part's exercises
-      for(let j=30;j<=time;j+=15){
+      for(let j=30;j<=this.time;j+=15){
         let index = (j-30)/15;
         if( index == 2 && (body == 'triceps' || body == 'biceps')) {
 
@@ -23,12 +34,7 @@ export class DailyRoutine {
           this.routine.push(w[(j-30)/15]);
       }
     }
-    // console.log(this.routine);
-    this.getRoutine = () => {
-      console.log(this.routine);
-    }
-    this.getRoutine();
+    // this.getRoutine();
   }
-
 
 }

@@ -5,40 +5,60 @@ import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, Table
 import TableCell from '@mui/material/TableCell';
 import { WorkoutService, output } from '../WorkoutService'
 import { Workout } from '../Workout';
+import { DailyRoutine } from '../DailyRoutine';
 // Table
-function createData(mon, tues, wed, thurs, fri, sat) {
-  return { mon, tues, wed, thurs, fri, sat };
+function createData(wrkt, sets) {
+  return { wrkt, sets };
 }
 
-const rows = [
-  createData('Bench 3x8-12',    'Squat',       'Rest', 'Bar Rows',     'Rest','Rest'),
-  createData('Shoulder Press',  'Leg curl',    '',     'Cable Row'),
-  createData('Incline Bench',   'Calf raises', '',     'Lat Pulldowns',''),
-  createData('Tricep extension','Ab crunches', '',     'Bar curls',    ''),
-  createData('Dips',            'Leg raises',  '',     'Dumbel curls', ''),
+let rows = [
+  // createData('Bench',           '3x8-12'),
+  // createData('Shoulder Press',  '3x8-12'),
+  // createData('Incline Bench',   '3x8-12'),
+  // createData('Tricep extension','3x8-12'),
+  // createData('Dips',            '3x8-12'),
   
 ];
 
 
-export const Finished = ({activeStep}) => {
+export const Finished = ({activeStep, bodys, min}) => {
+
+  const { upper, lower, core } = bodys;
 
   // Generating Routine 
   const [progress, setProgress] = React.useState(0);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
         // if (oldProgress === 100) {
         //   return 0;
         // }
-        const diff = Math.random() * 10;
+        const diff = Math.random() * 20;
         return Math.min(oldProgress + diff, 100);
       });
     }, 200);
 
-    return () => {
-      clearInterval(timer);
-    };
+    // return () => {clearInterval(timer);};
+    rows = [];
+    let dr = new DailyRoutine("Push Day", min, []);
+    dr.getRoutine();
+    if(upper) {
+      dr.bodys.push('chest');
+      dr.bodys.push('back');
+      dr.bodys.push('triceps');
+    }
+    if(lower) {
+      dr.bodys.push('legs');
+    }
+    if(core) {
+      dr.bodys.push('abs');
+    }
+    dr.createRoutine();
+    console.log('routine', dr.routine);
+    for(let i=0;i<dr.routine.length;i++) {
+      rows.push(createData(dr.routine[i].name, '3x8-12'));
+    }
   }, []);
   // fix glitch
   useEffect(() => {
@@ -63,16 +83,12 @@ export const Finished = ({activeStep}) => {
         <Button onClick={output}>output</Button>
         {progress >=100? 
         <>
-          <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+          <TableContainer sx={{ maxWidth: 300 }} component={Paper}>
+            <Table sx={{  }} size="small" aria-label="a dense table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Mon</TableCell>
-                  <TableCell align="right">Tues</TableCell>
-                  <TableCell align="right">Wed</TableCell>
-                  <TableCell align="right">Thurs</TableCell>
-                  <TableCell align="right">Fri</TableCell>
-                  <TableCell align="right">Sat</TableCell>
+                  <TableCell>Workout</TableCell>
+                  <TableCell align="right">Sets</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -82,13 +98,9 @@ export const Finished = ({activeStep}) => {
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.mon}
+                      {row.wrkt}
                     </TableCell>
-                    <TableCell align="right">{row.tues}</TableCell>
-                    <TableCell align="right">{row.wed}</TableCell>
-                    <TableCell align="right">{row.thurs}</TableCell>
-                    <TableCell align="right">{row.fri}</TableCell>
-                    <TableCell align="right">{row.sat}</TableCell>
+                    <TableCell align="right">{row.sets}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

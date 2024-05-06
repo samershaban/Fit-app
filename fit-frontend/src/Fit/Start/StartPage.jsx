@@ -25,7 +25,6 @@ export const StartPage = () => {
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set());
 
-
   const isStepOptional = (step) => {
     return step === 1;
   };
@@ -107,10 +106,25 @@ export const StartPage = () => {
     calisthenics: false,
   });
 
-  const handleChangeWorkouts = (event) => {
+  // Routine body parts
+  const [bodys, setBodys] = React.useState({
+    upper: true,
+    lower: true,
+    core: true,
+  });
+
+  const handleChangeWorkouts = (e) => {
     setWorkouts({
       ...workouts,
-      [event.target.name]: event.target.checked,
+      [e.target.name]: e.target.checked,
+    });
+  };
+
+  const handleChangeBodys = (e) => {
+    console.log(e.target.name, e.target.checked);
+    setBodys({
+      ...bodys,
+      [e.target.name]: e.target.checked,
     });
   };
 
@@ -130,8 +144,8 @@ export const StartPage = () => {
   // On component render
   useEffect(() => {
     let dr = new DailyRoutine("Push Day", 30, ['chest', 'shoulders', 'triceps']);
-    // dr.getRoutine();
-  })
+    dr.getRoutine();
+  },[])
 
   return(
     <div className="container mt-3">
@@ -162,6 +176,8 @@ export const StartPage = () => {
         <div className="container mt-3">
           <Finished
             activeStep={activeStep}
+            bodys={bodys}
+            min={minutes}
           />
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
@@ -239,7 +255,9 @@ export const StartPage = () => {
             minutes={minutes}
             handleChangeMin={handleChangeMin}
             workouts={workouts}
-            handleChange={handleChangeWorkouts}>
+            handleChange={handleChangeWorkouts}
+            bodys={bodys}
+            handleChangeBodys={handleChangeBodys}>
           </Schedule>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button

@@ -16,7 +16,7 @@ export const backLegs = new DailyRoutine("Pull Day", 45, ["back", "legs", "bicep
 
 export const chestBack = new DailyRoutine("Chest and Back Day", 45, ["chest", "back", "biceps"]);
 
-export const bicepsTriceps = new DailyRoutine("Chest and Back Day", 30, ["triceps", "biceps"]);
+export const arms = new DailyRoutine("Arm Day", 30, ["triceps", "biceps"]);
 // set how many workouts from each body part
 // add set and rep multiplyers
 // compound movements need more sets than isolation (bis and tris)

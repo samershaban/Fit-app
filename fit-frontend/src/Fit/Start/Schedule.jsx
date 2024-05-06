@@ -8,8 +8,9 @@ import FormHelperText from '@mui/material/FormHelperText';
 
 import InputLabel from '@mui/material/InputLabel';
 
-export const Schedule = ({daysPerWeek, handleChangeDPW, minutes, handleChangeMin, workouts, handleChange}) => {
+export const Schedule = ({daysPerWeek, handleChangeDPW, minutes, handleChangeMin, workouts, handleChange, bodys, handleChangeBodys}) => {
 
+  const { upper, lower, core } = bodys;
   const { strength, bodybuilding, calisthenics, general } = workouts;
   const error = [general, strength, bodybuilding, calisthenics].filter((v) => v).length > 2;
 
@@ -19,7 +20,7 @@ export const Schedule = ({daysPerWeek, handleChangeDPW, minutes, handleChangeMin
       <Container fixed sx={{ margin: 0 }} >
         <Box sx={{ height: '300px' }}>
         <Grid container spacing={2}>
-          <Grid item xs={6}>
+          <Grid item xs={4}>
           <Typography sx={{ mt: 1, mb: 1 }}>How many days per week can you commit?</Typography>
           <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Days</InputLabel>
@@ -65,7 +66,7 @@ export const Schedule = ({daysPerWeek, handleChangeDPW, minutes, handleChangeMin
               </Select>
             </FormControl>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <Typography sx={{ mt: 1, mb: 1 }}>What Workouts Interest you?</Typography>
               <Box sx={{ display: 'flex' }}>
                   <FormControl
@@ -103,6 +104,37 @@ export const Schedule = ({daysPerWeek, handleChangeDPW, minutes, handleChangeMin
                     />
                   </FormGroup>
                   <FormHelperText>Pick up to two*</FormHelperText>
+                </FormControl>
+              </Box>
+            </Grid>
+            <Grid item xs={4}>
+            <Typography sx={{ mt: 1, mb: 1 }}>What do you want to workout</Typography>
+              <Box sx={{ display: 'flex' }}>
+                  <FormControl
+                    sx={{ m: 3 }}
+                  >
+                  {/* <FormLabel component="legend">Pick two</FormLabel> */}
+                  <FormGroup>
+                    <FormControlLabel
+                        control={
+                          <Checkbox checked={upper} onChange={handleChangeBodys} name="upper" />
+                        }
+                        label="Upper Body"
+                      />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={lower} onChange={handleChangeBodys} name="lower" />
+                      }
+                      label="Lower Body"
+                    />
+                    <FormControlLabel
+                      control={
+                        <Checkbox checked={core} onChange={handleChangeBodys} name="core" />
+                      }
+                      label="Core"
+                    />
+
+                  </FormGroup>
                 </FormControl>
               </Box>
             </Grid>
