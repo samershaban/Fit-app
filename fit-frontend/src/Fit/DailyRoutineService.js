@@ -8,7 +8,7 @@ export const pull = new DailyRoutine("Pull Day", 45, ["back", "biceps"]);
 
 export const legs = new DailyRoutine("Leg Day", 45, ["legs", "calves"]);
 
-export const upperBody = new DailyRoutine("Push Day", 60, ["chest", "shoulder", "back", "triceps", "biceps"]);
+export const upperBody = new DailyRoutine("Upper body day", 60, ["chest", "shoulder", "back", "triceps", "biceps"]);
 
 export const legsAbs = new DailyRoutine("Leg and Ab Day", 45, ["legs", "calves", "abs"]);
 

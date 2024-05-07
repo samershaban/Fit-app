@@ -6,18 +6,19 @@ import TableCell from '@mui/material/TableCell';
 import { WorkoutService, output } from '../WorkoutService'
 import { Workout } from '../Workout';
 import { DailyRoutine } from '../DailyRoutine';
+
+import './Finished.css'
 // Table
 function createData(wrkt, sets) {
   return { wrkt, sets };
 }
 
 let rows = [
-  // createData('Bench',           '3x8-12'),
-  // createData('Shoulder Press',  '3x8-12'),
-  // createData('Incline Bench',   '3x8-12'),
-  // createData('Tricep extension','3x8-12'),
-  // createData('Dips',            '3x8-12'),
-  
+  [],
+  [],
+  [],
+  [],
+  []
 ];
 
 
@@ -40,7 +41,13 @@ export const Finished = ({activeStep, bodys, min}) => {
     }, 200);
 
     // return () => {clearInterval(timer);};
-    rows = [];
+    rows = [
+      [],
+      [],
+      [],
+      [],
+      []
+    ];
     let dr = new DailyRoutine("Push Day", min, []);
     dr.getRoutine();
     if(upper) {
@@ -57,19 +64,48 @@ export const Finished = ({activeStep, bodys, min}) => {
     dr.createRoutine();
     console.log('routine', dr.routine);
     for(let i=0;i<dr.routine.length;i++) {
-      rows.push(createData(dr.routine[i].name, '3x8-12'));
+      rows[0].push(createData(dr.routine[i].name, '3x8-12'));
     }
   }, []);
   // fix glitch
   useEffect(() => {
     setProgress(0);
   }, [activeStep]);
+  console.log(rows);
+  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+  const tables = rows.map((row, i) => (
+    <div className='item'>
+      <TableContainer sx={{ maxWidth: 300 }} component={Paper}>
+        <Table sx={{  }} size="small" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell>{daysOfWeek[i]}</TableCell>
+              <TableCell align="right">Sets</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {row.map((r, i) => (
+              <TableRow
+                key={i}
+                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {r.wrkt}
+                </TableCell>
+                <TableCell align="right">{r.sets}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </div>
+  ))
 
   return(
     <>
       <Typography sx={{ mt: 2, mb: 1 }}>Generating Routine</Typography>
       <Container fixed sx={{ margin: 0 }} >
-        <Box sx={{ height: '300px' }}>
+        <Box sx={{  }}>
         {/* <Box sx={{ flexGrow: 1 }}> */}
           <Grid container spacing={2}>
             <Grid item xs={12}>
@@ -81,18 +117,19 @@ export const Finished = ({activeStep, bodys, min}) => {
         {/* </Box> */}
         <br/>
         <Button onClick={output}>output</Button>
-        {progress >=100? 
-        <>
-          <TableContainer sx={{ maxWidth: 300 }} component={Paper}>
+        {/* {progress >=100?  */}
+        {/* <> */}
+        <div className='flex'>{tables}</div>
+          {/* <TableContainer sx={{ maxWidth: 300 }} component={Paper}>
             <Table sx={{  }} size="small" aria-label="a dense table">
               <TableHead>
                 <TableRow>
-                  <TableCell>Workout</TableCell>
+                  <TableCell>Monday</TableCell>
                   <TableCell align="right">Sets</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row, i) => (
+                {rows[0].map((row, i) => (
                   <TableRow
                     key={i}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -105,8 +142,8 @@ export const Finished = ({activeStep, bodys, min}) => {
                 ))}
               </TableBody>
             </Table>
-          </TableContainer>
-        </>:<></>}
+          </TableContainer> */}
+        {/* </>:<></>} */}
         
         </Box>
       </Container>
