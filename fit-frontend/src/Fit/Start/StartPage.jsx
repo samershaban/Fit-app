@@ -178,6 +178,7 @@ export const StartPage = () => {
             activeStep={activeStep}
             bodys={bodys}
             min={minutes}
+            workouts={workouts}
           />
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />

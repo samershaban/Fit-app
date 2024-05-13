@@ -6,7 +6,8 @@ import TableCell from '@mui/material/TableCell';
 import { WorkoutService, output } from '../WorkoutService'
 import { Workout } from '../Workout';
 import { DailyRoutine } from '../DailyRoutine';
-
+import { create, print } from '../WeeklyRoutineService';
+import { pull } from '../DailyRoutineService';
 import './Finished.css'
 // Table
 function createData(wrkt, sets) {
@@ -22,13 +23,19 @@ let rows = [
 ];
 
 
-export const Finished = ({activeStep, bodys, min}) => {
+export const Finished = ({activeStep, bodys, min, workouts}) => {
 
   const { upper, lower, core } = bodys;
+
+  const {general, strength, bodybuilding, calisthenics} = workouts;
 
   // Generating Routine 
   const [progress, setProgress] = React.useState(0);
 
+  const createWorkout = () => {
+
+  }
+  
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
@@ -64,9 +71,9 @@ export const Finished = ({activeStep, bodys, min}) => {
     dr.createRoutine();
     console.log('routine', dr.routine);
     for(let i=0;i<dr.routine.length;i++) {
-      rows[0].push(createData(dr.routine[i].name, '3x8-12'));
+      rows[0].push(createData(dr.routine[i].name, strength? '3x3-5': '3x8-12'));
     }
-  }, []);
+  });
   // fix glitch
   useEffect(() => {
     setProgress(0);
@@ -116,7 +123,7 @@ export const Finished = ({activeStep, bodys, min}) => {
           </Grid>
         {/* </Box> */}
         <br/>
-        <Button onClick={output}>output</Button>
+        <Button onClick={print}>output</Button>
         {/* {progress >=100?  */}
         {/* <> */}
         <div className='flex'>{tables}</div>

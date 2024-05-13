@@ -1,14 +1,14 @@
 import { DailyRoutine } from './DailyRoutine';
-import { Workout}  from './Workout';
+// import { Workout}  from './Workout';
 
 // Daily routines
-export const push = new DailyRoutine("Push Day", 45, ["chest", "shoulder", "triceps"]);
+export const push = new DailyRoutine("Push Day", 45, ["chest", "shoulders", "triceps"]);
 
 export const pull = new DailyRoutine("Pull Day", 45, ["back", "biceps"]);
 
 export const legs = new DailyRoutine("Leg Day", 45, ["legs", "calves"]);
 
-export const upperBody = new DailyRoutine("Upper body day", 60, ["chest", "shoulder", "back", "triceps", "biceps"]);
+export const upperBody = new DailyRoutine("Upper body", 60, ["chest", "shoulders", "back", "triceps", "biceps"]);
 
 export const legsAbs = new DailyRoutine("Leg and Ab Day", 45, ["legs", "calves", "abs"]);
 
