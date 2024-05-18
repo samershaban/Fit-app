@@ -34,9 +34,10 @@ export class DailyRoutine {
       // console.log(w[0]);
 
       // each body part's exercises
+      // add check for less than 3 evercises in the case of 60 min
       for(let j=30;j<=this.time;j+=15){
         let index = (j-30)/15;
-        if( index == 2 && (body == 'triceps' || body == 'biceps')) {
+        if( index == 2 && (body == 'triceps' || body == 'biceps' || body == 'calves')) {
 
         } else
           this.routine.push(w[(j-30)/15]);

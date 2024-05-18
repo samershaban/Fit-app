@@ -22,7 +22,8 @@ export const Routine = () => {
         <Link type="button" className="btn main-color btn-lg text-white" to="/login">Login</Link>
       </>
       }
-      
+      <p>Create routine</p>
+        <Link type="button" className="btn main-color btn-lg text-white" to="/start">Start</Link>
     </div>
   )
 }

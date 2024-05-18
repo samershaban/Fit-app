@@ -177,6 +177,7 @@ export const StartPage = () => {
           <Finished
             activeStep={activeStep}
             bodys={bodys}
+            daysPerWeek={daysPerWeek}
             min={minutes}
             workouts={workouts}
           />

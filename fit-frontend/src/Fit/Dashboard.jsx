@@ -156,7 +156,7 @@ const handleTitleTextChange = (e) => {
         <div className="row">
           <div className="col-4">
             <div className="list-group" id="list-tab" role="tablist">
-            {notes.length == 0? <div className="list-group-item list-group-item-action disabled">No notes</div>:
+            {notes.length == 0? <div className="list-group-item list-group-item-action disabled">No Routine</div>:
             notes.map((note, i) => (
               <a key={i} onClick={() => {selectNote(i)}} className="list-group-item list-group-item-action" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">
                 <h3>{note.title}</h3>
@@ -166,6 +166,9 @@ const handleTitleTextChange = (e) => {
             </div>
           </div>
           <div className="col-8" style={{paddingBottom: "5px"}}>
+            Coming soon
+          </div>
+          {/* <div className="col-8" style={{paddingBottom: "5px"}}>
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
             <button onClick={addNewNote} type="button" className="btn btn-primary">Add</button>
             <button onClick={updateNote} type="button" className="btn btn-secondary">Save</button>
@@ -194,7 +197,7 @@ const handleTitleTextChange = (e) => {
                 // style={{width: '100%', height: '100%', resize: 'none'}}
                 />
           </div>
-          </div>
+          </div> */}
         </div>
       </div>
       

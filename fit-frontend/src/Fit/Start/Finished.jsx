@@ -9,6 +9,7 @@ import { DailyRoutine } from '../DailyRoutine';
 import { create, print } from '../WeeklyRoutineService';
 import { pull } from '../DailyRoutineService';
 import './Finished.css'
+import { WeeklyRoutine } from '../WeeklyRoutine';
 // Table
 function createData(wrkt, sets) {
   return { wrkt, sets };
@@ -23,7 +24,7 @@ let rows = [
 ];
 
 
-export const Finished = ({activeStep, bodys, min, workouts}) => {
+export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
 
   const { upper, lower, core } = bodys;
 
@@ -32,10 +33,6 @@ export const Finished = ({activeStep, bodys, min, workouts}) => {
   // Generating Routine 
   const [progress, setProgress] = React.useState(0);
 
-  const createWorkout = () => {
-
-  }
-  
   useEffect(() => {
     const timer = setInterval(() => {
       setProgress((oldProgress) => {
@@ -55,30 +52,37 @@ export const Finished = ({activeStep, bodys, min, workouts}) => {
       [],
       []
     ];
-    let dr = new DailyRoutine("Push Day", min, []);
-    dr.getRoutine();
-    if(upper) {
-      dr.bodys.push('chest');
-      dr.bodys.push('back');
-      dr.bodys.push('triceps');
-    }
-    if(lower) {
-      dr.bodys.push('legs');
-    }
-    if(core) {
-      dr.bodys.push('abs');
-    }
-    dr.createRoutine();
-    console.log('routine', dr.routine);
-    for(let i=0;i<dr.routine.length;i++) {
-      rows[0].push(createData(dr.routine[i].name, strength? '3x3-5': '3x8-12'));
+
+    console.log('bodys', bodys);
+    let wr = create(daysPerWeek, min, workouts, bodys);
+    console.log(wr);
+    // let dr = new DailyRoutine("Push Day", min, []);
+    // dr.getRoutine();
+    // if(upper) {
+    //   dr.bodys.push('chest');
+    //   dr.bodys.push('back');
+    //   dr.bodys.push('triceps');
+    // }
+    // if(lower) {
+    //   dr.bodys.push('legs');
+    // }
+    // if(core) {
+    //   dr.bodys.push('abs');
+    // }
+    // dr.createRoutine();
+    // console.log('routine', dr.routine);
+    // // adding the workouts into the row
+    for(let d=0;d<wr.DailyRoutines.length;d++) {
+      for(let i=0;i<wr.DailyRoutines[d].routine.length;i++) {
+        rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
+      }
     }
   });
   // fix glitch
   useEffect(() => {
     setProgress(0);
+    console.log(rows);
   }, [activeStep]);
-  console.log(rows);
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
   const tables = rows.map((row, i) => (
     <div className='item'>

@@ -2,21 +2,21 @@ import { DailyRoutine } from './DailyRoutine';
 // import { Workout}  from './Workout';
 
 // Daily routines
-export const push = new DailyRoutine("Push Day", 45, ["chest", "shoulders", "triceps"]);
+export const push = (min) => {return new DailyRoutine("Push Day", min, ["chest", "shoulders", "triceps"]);}
 
-export const pull = new DailyRoutine("Pull Day", 45, ["back", "biceps"]);
+export const pull = (min) => {return new DailyRoutine("Pull Day", min, ["back", "biceps"]);}
 
-export const legs = new DailyRoutine("Leg Day", 45, ["legs", "calves"]);
+export const legs = (min) => {return new DailyRoutine("Leg Day", min, ["legs", "calves"]);}
 
-export const upperBody = new DailyRoutine("Upper body", 60, ["chest", "shoulders", "back", "triceps", "biceps"]);
+export const upperBody = (min) => {return new DailyRoutine("Upper body", min, ["chest", "shoulders", "back", "triceps", "biceps"]);}
 
-export const legsAbs = new DailyRoutine("Leg and Ab Day", 45, ["legs", "calves", "abs"]);
+export const legsAbs = (min) => {return new DailyRoutine("Leg and Ab Day", min, ["legs", "calves", "abs"]);}
 
-export const backLegs = new DailyRoutine("Pull Day", 45, ["back", "legs", "biceps"]);
+export const backLegs = (min) => {return new DailyRoutine("Pull Day", min, ["back", "legs", "biceps"]);}
 
-export const chestBack = new DailyRoutine("Chest and Back Day", 45, ["chest", "back", "biceps"]);
+export const chestBack = (min) => {return new DailyRoutine("Chest and Back Day", min, ["chest", "back", "biceps"]);}
 
-export const arms = new DailyRoutine("Arm Day", 30, ["triceps", "biceps"]);
+export const arms = (min) => {return new DailyRoutine("Arm Day", min, ["triceps", "biceps"]);}
 // set how many workouts from each body part
 // add set and rep multiplyers
 // compound movements need more sets than isolation (bis and tris)

@@ -36,13 +36,17 @@ export let workouts = new Map();
   workouts.get('legs').push(new Workout('Lunges', 'Legs', ['Calisthenics']));
   workouts.get('legs').push(new Workout('Bulgurian Split Squat', 'Legs', ['Calisthenics']));
 
+  workouts.get('calves').push(new Workout('Calf Raises', 'Calves', ['Hypertrophy', 'Strength']));
+  workouts.get('calves').push(new Workout('Standing Calf Raises', 'Calves', ['Hypertrophy', 'Strength']));
+
   workouts.get('lowerback').push(new Workout('Romanian Deadlift', 'Lower Back', ['Strength']));
   workouts.get('lowerback').push(new Workout('Deadlift', 'Lower Back', ['Strength']));
 
   workouts.get('shoulders').push(new Workout('Dumbell Shoulder Press', 'Shoulders', ['Strength', 'Hypertrophy']));
   // workouts.get('shoulders').push(new Workout('Military Press', 'Shoulders', ['Strength']));
-  workouts.get('shoulders').push(new Workout('Face Pulls', 'Shoulders', ['Hypertrophy', 'Strength']));
   workouts.get('shoulders').push(new Workout('Side lateral raises', 'Shoulders',['Strength', 'Hypertrophy']));
+  workouts.get('shoulders').push(new Workout('Face Pulls', 'Shoulders', ['Hypertrophy', 'Strength']));
+  
 
   workouts.get('shoulders').push(new Workout('Pike pushups', 'Shoulders', ['Calisthenics']));
 
