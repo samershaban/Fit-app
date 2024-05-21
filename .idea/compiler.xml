@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="fit-app" />
+        <module name="note-taker" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="note-taker" target="18" />
+      <module name="fit-app" target="18" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
