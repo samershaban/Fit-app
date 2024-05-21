@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.samer</groupId>
-	<artifactId>note-taker</artifactId>
+	<artifactId>fit-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>note-taker</name>
-	<description>Notes Application</description>
+	<name>fit-app</name>
+	<description>Fit Application</description>
 	<properties>
 		<java.version>18</java.version>
 	</properties>
