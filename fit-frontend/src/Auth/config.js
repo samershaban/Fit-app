@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and limitations under the License.
  */
 
-const CLIENT_ID = '0oacty3k2bgYfGnLO5d7';
+const CLIENT_ID = '0oah8geud8Mpyek6q5d7';//fitapp:0oah8geud8Mpyek6q5d7 notes:0oacty3k2bgYfGnLO5d7
 const ISSUER = 'https://dev-96235492.okta.com/oauth2/default';
 const OKTA_TESTING_DISABLEHTTPSCHECK = process.env.OKTA_TESTING_DISABLEHTTPSCHECK || true;
 const BASENAME = '/';
