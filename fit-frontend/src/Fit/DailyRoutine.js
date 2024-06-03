@@ -21,7 +21,7 @@ export class DailyRoutine {
 
   createRoutine = () => {
     const total = this.bodys.length;
-
+    
     for(let b=0;b<this.bodys.length;b++){
       // console.log(bodys[i]);
       let body = this.bodys[b];
