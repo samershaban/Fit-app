@@ -12,7 +12,7 @@ export const upperBody = (min) => {return new DailyRoutine("Upper body", min, ["
 
 export const legsAbs = (min) => {return new DailyRoutine("Leg and Ab Day", min, ["legs", "calves", "abs"]);}
 
-export const backLegs = (min) => {return new DailyRoutine("Pull Day", min, ["back", "legs", "biceps"]);}
+export const backLegs = (min) => {return new DailyRoutine("Back Legs", min, ["legs", "back", "biceps"]);}
 
 export const chestBack = (min) => {return new DailyRoutine("Chest and Back Day", min, ["chest", "back", "biceps"]);}
 

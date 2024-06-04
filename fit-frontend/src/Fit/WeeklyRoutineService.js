@@ -18,7 +18,9 @@ export const create = (daysPerWeek, min, workouts, bodys) => {
 
   const {general, strength, bodybuilding, calisthenics} = workouts;
   if(daysPerWeek == 2) {
-    return new WeeklyRoutine("Upper Lower", daysPerWeek, min, [upperBody(min), legsAbs(min)]);
+    return (min>45? new WeeklyRoutine("Upper Lower", daysPerWeek, min, [upperBody(min), legsAbs(min)]):
+                    new WeeklyRoutine("Upper Lower", daysPerWeek, min, [push(min), backLegs(min)])
+    );
   } else if(daysPerWeek == 3){
     return new WeeklyRoutine("Push Pull Legs", daysPerWeek, min, [push(min), pull(min), legs(min)]);
   } else if(daysPerWeek == 4) {

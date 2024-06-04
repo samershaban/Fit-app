@@ -29,7 +29,7 @@ export let workouts = new Map();
   workouts.get('back').push(new Workout('Lat Pulldowns', 'Back', ['Strength, Hypertrophy']));
   workouts.get('back').push(new Workout('Seated Cable Row', 'Back', ['Strength, Hypertrophy']));
   workouts.get('back').push(new Workout('Pullups', 'Back', ['Calisthenics']));
-
+  
   workouts.get('legs').push(new Workout('Squat', 'Legs', ['Strength', 'Hypertrophy']));
   workouts.get('legs').push(new Workout('Leg curl', 'Legs', ['Strength', 'Hypertrophy']));
   workouts.get('legs').push(new Workout('Leg Press', 'Legs', ['Strength', 'Hypertrophy']));
