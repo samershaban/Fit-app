@@ -165,8 +165,11 @@ const handleTitleTextChange = (e) => {
             ))}
             </div>
           </div>
-          <div className="col-8" style={{paddingBottom: "5px"}}>
+          <div className="col-4" style={{paddingBottom: "5px"}}>
             Coming soon
+          </div>
+          <div className="col-4" style={{paddingBottom: "5px"}}>
+            Your diet
           </div>
           {/* <div className="col-8" style={{paddingBottom: "5px"}}>
           <div className="btn-group" role="group" aria-label="Basic mixed styles example">
