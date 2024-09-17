@@ -42,7 +42,7 @@ function App() {
         <div className='flex-grow-1'>
           <Switch>
             <Route path='/' exact>
-              <Redirect to='home'/>
+              <Redirect to='start'/>
             </Route>
             <Route path='/start'>
               <StartPage/>

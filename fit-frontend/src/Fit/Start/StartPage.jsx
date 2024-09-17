@@ -12,6 +12,8 @@ import { Goals } from './Goals';
 import { BasicInfo } from './BasicInfo';
 import { Schedule } from './Schedule';
 import { Finished } from './Finished';
+import { WorkoutService, output } from '../WorkoutService'
+import { DailyRoutine } from '../DailyRoutine';
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
@@ -104,10 +106,25 @@ export const StartPage = () => {
     calisthenics: false,
   });
 
-  const handleChangeWorkouts = (event) => {
+  // Routine body parts
+  const [bodys, setBodys] = React.useState({
+    upper: true,
+    lower: true,
+    core: true,
+  });
+
+  const handleChangeWorkouts = (e) => {
     setWorkouts({
       ...workouts,
-      [event.target.name]: event.target.checked,
+      [e.target.name]: e.target.checked,
+    });
+  };
+
+  const handleChangeBodys = (e) => {
+    console.log(e.target.name, e.target.checked);
+    setBodys({
+      ...bodys,
+      [e.target.name]: e.target.checked,
     });
   };
 
@@ -120,9 +137,15 @@ export const StartPage = () => {
   };
 
   // Main Code
+  // useEffect(() => {
+  //   console.log(weight)
+  // }, [weight]);
+
+  // On component render
   useEffect(() => {
-    console.log(weight)
-  }, [weight]);
+    let dr = new DailyRoutine("Push Day", 30, ['chest', 'shoulders', 'triceps']);
+    dr.getRoutine();
+  },[])
 
   return(
     <div className="container mt-3">
@@ -153,6 +176,10 @@ export const StartPage = () => {
         <div className="container mt-3">
           <Finished
             activeStep={activeStep}
+            bodys={bodys}
+            daysPerWeek={daysPerWeek}
+            min={minutes}
+            workouts={workouts}
           />
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Box sx={{ flex: '1 1 auto' }} />
@@ -230,7 +257,9 @@ export const StartPage = () => {
             minutes={minutes}
             handleChangeMin={handleChangeMin}
             workouts={workouts}
-            handleChange={handleChangeWorkouts}>
+            handleChange={handleChangeWorkouts}
+            bodys={bodys}
+            handleChangeBodys={handleChangeBodys}>
           </Schedule>
           <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
             <Button

@@ -1,0 +1,13 @@
+.flex {
+  display: flex;
+  flex-wrap: wrap;
+  border: 2px solid white;
+}
+
+.item {
+  width: 300px;
+  /* height: 300px; */
+  margin: 5px;
+  border: 2px solid #0e76a8;
+  border-radius: 5px;
+}
