@@ -1,61 +1,60 @@
 package com.samer.fitapp.controller;
 
-import com.samer.fitapp.entity.Note;
-import com.samer.fitapp.service.NoteService;
+import com.samer.fitapp.entity.Weight;
+import com.samer.fitapp.service.WeightService;
 import com.samer.fitapp.utils.ExtractJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @CrossOrigin("http://localhost:3000")
 //@CrossOrigin("http://fitapp.us-east-2.elasticbeanstalk.com")
 @RestController
-@RequestMapping("/api/notes")
-public class NoteController {
-    private NoteService noteService;
+@RequestMapping("/api/weights")
+public class WeightController {
+    private WeightService weightService;
 
     @Autowired
-    public NoteController(NoteService noteService) {
-        this.noteService = noteService;
+    public WeightController(WeightService weightService) {
+        this.weightService = weightService;
     }
 
     @GetMapping("/byUserEmail")
-    public List<Note> getNotes(@RequestHeader(value = "Authorization") String token)
+    public List<Weight> getNotes(@RequestHeader(value = "Authorization") String token)
         throws Exception{
         String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
-        return noteService.getNotes(userEmail);
+        return weightService.getWeights(userEmail);
     }
 
     @PostMapping("/byUserEmail")
-    public Note postNote(@RequestHeader(value = "Authorization") String token,
-                         @RequestBody Note noteRequest)
+    public Weight postWeight(@RequestHeader(value = "Authorization") String token,
+                         @RequestBody Weight weightRequest)
         throws Exception{
         String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
         System.out.println("userEmail:"+userEmail);
-        noteRequest.setUserEmail(userEmail);
-        return noteService.postNote(userEmail, noteRequest);
+        weightRequest.setUserEmail(userEmail);
+        Date date = new Date();
+        weightRequest.setDate(date);
+        return weightService.postWeight(userEmail, weightRequest);
     }
 
     @PutMapping("/byUserEmail")
-    public void updateNote(@RequestHeader(value = "Authorization") String token,
-                           @RequestBody Note noteRequest, @RequestParam Long noteId)
+    public void updateWeight(@RequestHeader(value = "Authorization") String token,
+                           @RequestBody Weight weightRequest, @RequestParam Long id)
             throws Exception{
         String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
         System.out.println("userEmail:"+userEmail);
-        noteService.updateNote(noteId, userEmail, noteRequest);
+        weightService.updateWeight(id, userEmail, weightRequest);
     }
 
     @DeleteMapping("/byUserEmail")
     public void deleteNote(@RequestHeader(value = "Authorization") String token,
-                         @RequestParam Long noteId)
+                         @RequestParam Long weightId)
             throws Exception{
         String userEmail = ExtractJWT.payloadJWTExtraction(token, "\"sub\"");
-        noteService.deleteNote(noteId, userEmail);
+        weightService.deleteWeight(weightId, userEmail);
     }
 
-//    @PostMapping("/add")
-//    public void postMessage(@RequestBody Note noteRequest) {
-//        noteService.postNote(noteRequest);
-//    }
 }
