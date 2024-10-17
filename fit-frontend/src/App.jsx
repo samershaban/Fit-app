@@ -11,6 +11,7 @@ import { OktaAuth, toRelativeUrl } from '@okta/okta-auth-js';
 import { LoginCallback, SecureRoute, Security } from '@okta/okta-react';
 import { StartPage } from './Fit/Start/StartPage';
 import { Routine } from './Fit/Routine';
+import { Account } from './Fit/Account';
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -53,6 +54,9 @@ function App() {
             <Route path='/dashboard'>
               <Dashboard/>
             </Route>
+            <SecureRoute path='/account'>
+              <Account/>
+            </SecureRoute>
             {/* <SecureRoute path='/home'> <HomePage/> </SecureRoute> */}
             <Route path="/login/callback" render={(props) => <LoginCallback {...props} onAuthResume={onAuthResume} />} />
             <Route path="/login" render={() => <LoginWidget {...{ setCorsErrorModalOpen }} />} />
