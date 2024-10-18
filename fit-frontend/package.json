@@ -5,7 +5,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@mui/material": "^5.15.15",
+    "@mui/material": "^5.16.7",
+    "@mui/x-charts": "^7.21.0",
     "@okta/okta-react": "^6.4.3",
     "@okta/okta-signin-widget": "^6.3.3",
     "@testing-library/jest-dom": "^5.17.0",
