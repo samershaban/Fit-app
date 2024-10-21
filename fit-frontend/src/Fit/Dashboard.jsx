@@ -4,6 +4,23 @@ import React, { useEffect, useRef, useState } from "react";
 import { LineChart } from '@mui/x-charts/LineChart';
 import './Dashboard.css'
 import { Button, Grid, Card, Paper, InputAdornment, TextField, Typography } from "@mui/material";
+import {
+  worldElectricityProduction,
+  keyToLabel,
+  colors,
+} from './worldElectricityProduction';
+
+const stackStrategy = {
+  stack: 'total',
+  area: true,
+  stackOffset: 'none', // To stack 0 on top of others
+};
+
+const customize = {
+  height: 300,
+  legend: { hidden: true },
+  margin: { top: 5 },
+};
 
 export const Dashboard = () => {
 
@@ -14,34 +31,49 @@ export const Dashboard = () => {
   const [selectedNoteBody, setSelectedNoteBody]= useState('');
   const [selectedNoteTitle, setSelectedNoteTitle]= useState(0);
   const [weight, setWeight] = useState(0);
+  const [weightData, setWeightData] = useState([157.00, 159.50, 160.00, 161.00, 163.00, 163.50]);
+  // const [weightAxis, setWeightAxis] = useState(['1', '2', '3', '5', '8', '10']);
+  const [weightAxis, setWeightAxis] = useState([
+    new Date('2024-10-08 00:00:00'),
+    new Date('2024-10-15 00:00:00'),
+    new Date('2024-10-16 00:00:00'),
+    new Date('2024-10-17 00:00:00'),
+    new Date('2024-10-20 00:00:00'),
+    new Date('2024-10-21 00:00:00'),
+  ]);
+  const [colorX, setColorX] = useState('None');
+  const [colorY, setColorY] = useState('None');
   // const app_url = 'fit.app';
   const app_url = 'http://localhost:8080';
 
   const bodyRef = useRef(null);
 
- useEffect(() => {
+  useEffect(() => {
 
-  const fetchWeights = async () => {
+    const fetchWeights = async () => {
     // console.log(authState);
-    if (authState && authState?.isAuthenticated) {
-      const url = `${app_url}/api/weights/byUserEmail`;
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
-          'Content-Type': 'application/json',
-        }
-      };
-      axios.get(url, requestOptions).then((res) =>{
-        // console.log(res.data);
-        setWeights(res.data.sort((a,b) => b.date.localeCompare(a.date)));
-        setWeight(weights[0].value);// fix
-      }).catch(err => {
-        console.log(err);
-      })
+      if (authState && authState?.isAuthenticated) {
+        const url = `${app_url}/api/weights/byUserEmail`;
+        const requestOptions = {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+            'Content-Type': 'application/json',
+          }
+        };
+        axios.get(url, requestOptions).then((res) =>{
+          // console.log(res.data);
+          setWeights(res.data.sort((a,b) => a.date.localeCompare(b.date)));
+          // setWeight(weights[0].value);// fix
+          // dates = res.data.date.split('-')
+          setWeightData(res.data.map((w) => w.value));
+          setWeightAxis(res.data.map((w) => new Date(w.date)));
+        }).catch(err => {
+          console.log(err);
+        })
+      }
     }
-  }
-  fetchWeights();
+    fetchWeights();
 
  }, [authState])
 
@@ -53,6 +85,14 @@ export const Dashboard = () => {
  useEffect(() => {
   console.log(weight);
  }, [weight])
+
+ useEffect(() => {
+  console.log(weightData);
+ }, [weightData])
+
+ useEffect(() => {
+  console.log(weightAxis);
+ }, [weightAxis])
 
   const handleChangeWeight = (e) => {
     if(e.target.value < 0){
@@ -219,15 +259,25 @@ export const Dashboard = () => {
           />
           <button onClick={addWeight} type="button" className="btn btn-primary">Check in Weight</button>
           <div>
+
           <LineChart
-            xAxis={[{ data: [1, 2, 3, 5, 8, 10] }]}
+            height={300}
+            width={500}
+            grid={{ horizontal: false }}
             series={[
               {
-                data: [2, 5.5, 2, 8.5, 1.5, 5],
+                data: weightData,
               },
             ]}
-            width={500}
-            height={300}
+
+            xAxis={[
+              {
+                scaleType: 'band',
+                data: weightAxis,
+                valueFormatter: (value) => value.getMonth()+1+'/'+(value.getDate()+1),
+              },
+            ]}
+
           />
           </div>
           <div className="list-group" id="list-tab" role="tablist">
