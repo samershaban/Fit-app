@@ -4,11 +4,6 @@ import React, { useEffect, useRef, useState } from "react";
 import { LineChart } from '@mui/x-charts/LineChart';
 import './Dashboard.css'
 import { Button, Grid, Card, Paper, InputAdornment, TextField, Typography } from "@mui/material";
-import {
-  worldElectricityProduction,
-  keyToLabel,
-  colors,
-} from './worldElectricityProduction';
 
 const stackStrategy = {
   stack: 'total',

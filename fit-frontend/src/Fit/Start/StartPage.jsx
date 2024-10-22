@@ -76,8 +76,8 @@ export const StartPage = () => {
 
   // Basic Info
   const [feet, setFeet] = React.useState('5');
-  const [inches, setInches] = React.useState('0');
-  const [weight, setWeight] = React.useState('');
+  const [inches, setInches] = React.useState(0);
+  const [weight, setWeight] = React.useState(150);
 
   const handleChangeFeet = (e) => {
     setFeet(e.target.value);
