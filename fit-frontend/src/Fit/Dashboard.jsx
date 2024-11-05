@@ -26,15 +26,15 @@ export const Dashboard = () => {
   const [selectedNoteBody, setSelectedNoteBody]= useState('');
   const [selectedNoteTitle, setSelectedNoteTitle]= useState(0);
   const [weight, setWeight] = useState(0);
-  const [weightData, setWeightData] = useState([157.00, 159.50, 160.00, 161.00, 163.00, 163.50]);
+  const [weightData, setWeightData] = useState([]);
   // const [weightAxis, setWeightAxis] = useState(['1', '2', '3', '5', '8', '10']);
   const [weightAxis, setWeightAxis] = useState([
-    new Date('2024-10-08 00:00:00'),
-    new Date('2024-10-15 00:00:00'),
-    new Date('2024-10-16 00:00:00'),
-    new Date('2024-10-17 00:00:00'),
-    new Date('2024-10-20 00:00:00'),
-    new Date('2024-10-21 00:00:00'),
+    // new Date('2024-10-08 00:00:00'),
+    // new Date('2024-10-15 00:00:00'),
+    // new Date('2024-10-16 00:00:00'),
+    // new Date('2024-10-17 00:00:00'),
+    // new Date('2024-10-20 00:00:00'),
+    // new Date('2024-10-21 00:00:00'),
   ]);
   const [colorX, setColorX] = useState('None');
   const [colorY, setColorY] = useState('None');
@@ -292,9 +292,6 @@ export const Dashboard = () => {
         </Paper>
         </Grid>
         <Grid item xs={12}>
-        <Paper variant="outlined" margin={5}>
-          <Typography>Routine</Typography>
-        </Paper>
         <>
           {
           /* <div className="col-8" style={{paddingBottom: "5px"}}>
