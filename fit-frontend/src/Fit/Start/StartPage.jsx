@@ -96,7 +96,7 @@ export const StartPage = () => {
 
   // Workouts Check boxes
   const [daysPerWeek, setDaysPerWeek] = React.useState(3);
-  const [minutes, setMinutes] = React.useState();
+  const [minutes, setMinutes] = React.useState(45);
   
   // Routine info
   const [workouts, setWorkouts] = React.useState({
