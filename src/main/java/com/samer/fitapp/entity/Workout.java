@@ -12,7 +12,6 @@ import java.util.Date;
 public class Workout {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "email")
     private String userEmail;
 

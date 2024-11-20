@@ -251,7 +251,7 @@ export const StartPage = () => {
 
       {activeStep === 2 ? (
         <div className="container mt-3">
-          <Schedule 
+          <Schedule
             daysPerWeek={daysPerWeek} 
             handleChangeDPW={handleChangeDPW}
             minutes={minutes}

@@ -277,7 +277,7 @@ export const Dashboard = () => {
           </div>
           <div className="list-group" id="list-tab" role="tablist">
           {weights.length == 0? <div className="list-group-item list-group-item-action disabled">No Weight entrees</div>:
-          weights.map((w, i) => (
+          weights.reverse().map((w, i) => (
             <a key={i} onClick={() => {/*selectNote(i)*/}} className="list-group-item list-group-item-action" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">
               <h3>{w?.value}</h3>
               <p>{w?.date}</p>
@@ -288,7 +288,7 @@ export const Dashboard = () => {
         </Grid>
         <Grid item xs={6}>
         <Paper variant="outlined" margin={5}>
-          <Typography>Diet</Typography>
+          <Typography>Todays Workout</Typography>
         </Paper>
         </Grid>
         <Grid item xs={12}>

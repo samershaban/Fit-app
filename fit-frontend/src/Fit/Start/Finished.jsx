@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useOktaAuth } from "@okta/okta-react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
@@ -10,6 +11,7 @@ import { create, print } from '../WeeklyRoutineService';
 import { pull } from '../DailyRoutineService';
 import './Finished.css'
 import { WeeklyRoutine } from '../WeeklyRoutine';
+import axios from 'axios';
 // Table
 function createData(wrkt, sets) {
   return { wrkt, sets };
@@ -26,12 +28,38 @@ let rows = [
 
 export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
 
+
+  const { authState } = useOktaAuth();
+  const app_url = 'http://localhost:8080';
   const { upper, lower, core } = bodys;
-
   const {general, strength, bodybuilding, calisthenics} = workouts;
-
+  let wr = []; 
   // Generating Routine 
   const [progress, setProgress] = React.useState(0);
+
+  const postRoutine = async () => {
+    // console.log(authState);
+    if (authState && authState?.isAuthenticated) {
+      const url = `${app_url}/api/workout/byUserEmail`;
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          'Content-Type': 'application/json',
+        }
+      };
+      axios.post(url, {
+        email: "adminuser@email.com",
+        workout: JSON.stringify(wr)
+      }, requestOptions
+      ).then((res) =>{
+        console.log(JSON.parse(res.data.workout));
+        // setRoutine(res.data.workout);
+      }).catch(err => {
+        console.log(err);
+      })
+    }
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -54,8 +82,10 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
     ];
 
     console.log('bodys', bodys);
-    let wr = create(daysPerWeek, min, workouts, bodys);
+    wr = create(daysPerWeek, min, workouts, bodys);
     console.log(wr);
+    postRoutine();
+
     // let dr = new DailyRoutine("Push Day", min, []);
     // dr.getRoutine();
     // if(upper) {
@@ -83,6 +113,8 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
     setProgress(0);
     console.log(rows);
   }, [activeStep]);
+
+
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
   const tables = rows.map((row, i) => (
     <div className='item'>
@@ -114,7 +146,7 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
 
   return(
     <>
-      <Typography sx={{ mt: 2, mb: 1 }}>Generating Routine</Typography>
+      <Typography sx={{ mt: 2, mb: 1 }}>Creating Routine</Typography>
       <Container fixed sx={{ margin: 0 }} >
         <Box sx={{  }}>
         {/* <Box sx={{ flexGrow: 1 }}> */}
