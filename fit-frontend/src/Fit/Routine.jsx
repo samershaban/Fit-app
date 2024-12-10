@@ -28,42 +28,6 @@ export const Routine = ({options, loggedIn}) => {
     []
   ]);
 
-//   useEffect(() => {
-//     if(!localStorage.getItem('workout')) {
-//       console.log('workout empty');
-//       return;
-//     }
-//     const fetchRoutine = async () => {
-//     // console.log(authState);
-//       if (authState && authState?.isAuthenticated) {
-//         const url = `${app_url}/api/workout/byUserEmail`;
-//         const requestOptions = {
-//           method: 'GET',
-//           headers: {
-//             Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
-//             'Content-Type': 'application/json',
-//           }
-//         };
-//         axios.get(url, requestOptions)
-//         .then((res) =>{
-//           let wr = JSON.parse(res.data.workout);
-//           console.log(wr);
-          
-//           for(let d=0;d<wr.DailyRoutines.length;d++) {
-//             for(let i=0;i<wr.DailyRoutines[d].routine.length;i++) {
-//               rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
-//               // console.log(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
-//               // try to mutate array to force a rerender
-//             }
-//           }
-//           setRoutine(res.data.workout);
-//         }).catch(err => {
-//           console.log(err);
-//         })
-//       }
-//     }
-//     fetchRoutine();
-//  }, [authState])
   const fetchRoutine = async () => {
   // console.log(authState);
   

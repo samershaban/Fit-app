@@ -38,8 +38,8 @@ export const Dashboard = () => {
   ]);
   const [colorX, setColorX] = useState('None');
   const [colorY, setColorY] = useState('None');
-  // const app_url = 'fit.app';
-  const app_url = 'http://localhost:8080';
+  const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com/';
+  // const app_url = 'http://localhost:8080';
 
   const bodyRef = useRef(null);
 
