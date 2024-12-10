@@ -12,6 +12,7 @@ import { pull } from '../DailyRoutineService';
 import './Finished.css'
 import { WeeklyRoutine } from '../WeeklyRoutine';
 import axios from 'axios';
+import { Routine } from '../Routine';
 // Table
 function createData(wrkt, sets) {
   return { wrkt, sets };
@@ -25,7 +26,6 @@ let rows = [
   []
 ];
 
-
 export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
 
 
@@ -33,8 +33,8 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
   const app_url = 'http://localhost:8080';
   const { upper, lower, core } = bodys;
   const {general, strength, bodybuilding, calisthenics} = workouts;
-  let wr = []; 
-  // Generating Routine 
+  let wr = [];
+  // Generating Routine
   const [progress, setProgress] = React.useState(0);
 
   const postRoutine = async () => {
@@ -107,6 +107,7 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
         rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
       }
     }
+    localStorage.setItem('workout', JSON.stringify(wr));
   });
   // fix glitch
   useEffect(() => {
@@ -161,33 +162,8 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
         <br/>
         <Button onClick={print}>output</Button>
         {/* {progress >=100?  */}
-        {/* <> */}
         <div className='flex'>{tables}</div>
-          {/* <TableContainer sx={{ maxWidth: 300 }} component={Paper}>
-            <Table sx={{  }} size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Monday</TableCell>
-                  <TableCell align="right">Sets</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows[0].map((row, i) => (
-                  <TableRow
-                    key={i}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.wrkt}
-                    </TableCell>
-                    <TableCell align="right">{row.sets}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer> */}
-        {/* </>:<></>} */}
-        
+        {/* <Routine options={false}></Routine> */}
         </Box>
       </Container>
     </>

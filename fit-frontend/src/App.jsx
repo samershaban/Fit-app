@@ -49,7 +49,7 @@ function App() {
               <StartPage/>
             </Route>
             <Route path='/routine'>
-              <Routine/>
+              <Routine options={true}/>
             </Route>
             <Route path='/dashboard'>
               <Dashboard/>

@@ -141,7 +141,7 @@ export const Dashboard = () => {
       })
   }
 
-  const addNewNote = () => {
+  const postRequest = () => {
     const url = `${app_url}/api/notes/byUserEmail`;
       const requestOptions = {
         method: 'POST',
@@ -169,7 +169,7 @@ export const Dashboard = () => {
       })
   }
 
-  const deleteNote = () => {
+  const deleteRequest = () => {
     if(selectedNote === -1) {
       return
     }
@@ -198,7 +198,7 @@ export const Dashboard = () => {
       })
   }
 
-  const updateNote = () => {
+  const putRequest = () => {
     let currentNotes = notes;
     let noteId = notes[selectedNote].id;
     const url = `${app_url}/api/notes/byUserEmail?noteId=${noteId}`;
@@ -232,8 +232,8 @@ export const Dashboard = () => {
       <h1>Welcome to Fit App</h1>
       <Grid container spacing={0}>
         <Grid item xs={6}>
-          <Paper variant="outlined" margin={5}>
-          <Typography>Weight</Typography>
+          <Paper variant="outlined" style={{margin: 5, padding: 5}}>
+          <Typography variant="h5">Weight</Typography>
           <br/>
           <TextField
             label="Weight"
@@ -275,23 +275,19 @@ export const Dashboard = () => {
 
           />
           </div>
-          <div className="list-group" id="list-tab" role="tablist">
-          {weights.length == 0? <div className="list-group-item list-group-item-action disabled">No Weight entrees</div>:
-          weights.reverse().map((w, i) => (
-            <a key={i} onClick={() => {/*selectNote(i)*/}} className="list-group-item list-group-item-action" id="list-home-list" data-bs-toggle="list" href="#list-home" role="tab" aria-controls="list-home">
-              <h3>{w?.value}</h3>
-              <p>{w?.date}</p>
-            </a>
-          ))}
-          </div>
+
           </Paper>
         </Grid>
         <Grid item xs={6}>
-        <Paper variant="outlined" margin={5}>
-          <Typography>Todays Workout</Typography>
-        </Paper>
+          <Paper variant="outlined" style={{margin: 5, padding: 5}}>
+            <Typography variant="h5">Todays Workout</Typography>
+          </Paper>
         </Grid>
         <Grid item xs={12}>
+        <Paper variant="outlined" style={{margin: 5, padding: 5}}>
+          <Typography variant="h5">Diet</Typography>
+          <p>coming soon</p>
+        </Paper>
         <>
           {
           /* <div className="col-8" style={{paddingBottom: "5px"}}>

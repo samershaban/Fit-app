@@ -4,16 +4,17 @@ import { Link } from "react-router-dom"
 import axios from 'axios';
 import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
-
+import './Start/Finished.css';
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
-export const Routine = () => {
+export const Routine = ({options, loggedIn}) => {
 
   const { authState } = useOktaAuth();
   const[routine, setRoutine] = useState({});
   const app_url = 'http://localhost:8080';
 
+  let loaded = false;
   function createData(wrkt, sets) {
     return { wrkt, sets };
   }
@@ -27,40 +28,113 @@ export const Routine = () => {
     []
   ]);
 
-  useEffect(() => {
-
-    const fetchRoutine = async () => {
-    // console.log(authState);
-      if (authState && authState?.isAuthenticated) {
-        const url = `${app_url}/api/workout/byUserEmail`;
-        const requestOptions = {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
-            'Content-Type': 'application/json',
-          }
-        };
-        axios.get(url, requestOptions)
-        .then((res) =>{
-          let wr = JSON.parse(res.data.workout);
-          console.log(wr);
+//   useEffect(() => {
+//     if(!localStorage.getItem('workout')) {
+//       console.log('workout empty');
+//       return;
+//     }
+//     const fetchRoutine = async () => {
+//     // console.log(authState);
+//       if (authState && authState?.isAuthenticated) {
+//         const url = `${app_url}/api/workout/byUserEmail`;
+//         const requestOptions = {
+//           method: 'GET',
+//           headers: {
+//             Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+//             'Content-Type': 'application/json',
+//           }
+//         };
+//         axios.get(url, requestOptions)
+//         .then((res) =>{
+//           let wr = JSON.parse(res.data.workout);
+//           console.log(wr);
           
-          for(let d=0;d<wr.DailyRoutines.length;d++) {
-            for(let i=0;i<wr.DailyRoutines[d].routine.length;i++) {
-              rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
-              // console.log(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
-              // try to mutate array to force a rerender
-            }
+//           for(let d=0;d<wr.DailyRoutines.length;d++) {
+//             for(let i=0;i<wr.DailyRoutines[d].routine.length;i++) {
+//               rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
+//               // console.log(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
+//               // try to mutate array to force a rerender
+//             }
+//           }
+//           setRoutine(res.data.workout);
+//         }).catch(err => {
+//           console.log(err);
+//         })
+//       }
+//     }
+//     fetchRoutine();
+//  }, [authState])
+  const fetchRoutine = async () => {
+  // console.log(authState);
+  
+    if (authState && authState?.isAuthenticated) {
+      const url = `${app_url}/api/workout/byUserEmail`;
+      const requestOptions = {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          'Content-Type': 'application/json',
+        }
+      };
+      axios.get(url, requestOptions)
+      .then((res) =>{
+        let wr = JSON.parse(res.data.workout);
+        console.log(wr);
+        
+        for(let d=0;d<wr.DailyRoutines.length;d++) {
+          for(let i=0;i<wr.DailyRoutines[d].routine.length;i++) {
+            rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
+            // console.log(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
+            // try to mutate array to force a rerender
           }
-          setRoutine(res.data.workout);
-        }).catch(err => {
-          console.log(err);
-        })
-      }
+        }
+        setRoutine(res.data.workout);
+      }).catch(err => {
+        console.log(err);
+      })
     }
-    fetchRoutine();
+  }
 
- }, [authState])
+  const getLocalRoutine = () => {
+    let wr = JSON.parse(localStorage.getItem('workout'));
+      for(let d=0;d<wr.DailyRoutines.length;d++) {
+        for(let i=0;i<wr.DailyRoutines[d].routine.length;i++) {
+          rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
+          // console.log(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
+          // try to mutate array to force a rerender
+        }
+      }
+      setRoutine(wr);
+  }
+
+  useEffect(() => {
+    if(!authState?.isAuthenticated && localStorage.getItem('workout')) {
+      getLocalRoutine();
+      loaded = true;
+    } else if(authState?.isAuthenticated) {
+      fetchRoutine();
+      loaded = true;
+    } else {
+      console.log('workout empty:'+ authState);
+    }
+  },[]);
+
+  useEffect(() => {
+    // setRows([
+    //   [],
+    //   [],
+    //   [],
+    //   [],
+    //   []
+    // ]);
+    if(loaded==false){
+      fetchRoutine();
+      console.log(routine);
+      console.log(authState);
+    } else {
+      console.log('already loaded');
+    }
+  }, [authState])
 
  const tables = rows.map((row, i) => (
   <div className='item'>
@@ -93,9 +167,10 @@ export const Routine = () => {
   return(
     <div className="container mt-3">
       <h1>Your current routine</h1>
-      {tables}
+      <div className='flex'>{tables}</div>
       {/* {JSON.stringify(routine)} */}
-      {authState?.isAuthenticated ?
+      {options===true && <>
+      {authState?.isAuthenticated?
       <>
         <p>Go to my dashboard</p>
         <Link type="button" className="btn main-color btn-lg text-white" to="/dashboard">Dashboard</Link>
@@ -107,6 +182,7 @@ export const Routine = () => {
       }
       <p>Create routine</p>
         <Link type="button" className="btn main-color btn-lg text-white" to="/start">Start</Link>
+      </>}
     </div>
   )
 }
