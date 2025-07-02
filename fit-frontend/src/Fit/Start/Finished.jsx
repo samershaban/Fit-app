@@ -30,7 +30,8 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
 
 
   const { authState } = useOktaAuth();
-  const app_url = 'http://localhost:8080';
+  // const app_url = 'http://localhost:8080';
+  const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
   const { upper, lower, core } = bodys;
   const {general, strength, bodybuilding, calisthenics} = workouts;
   let wr = [];
