@@ -12,7 +12,8 @@ export const Routine = ({options, loggedIn}) => {
 
   const { authState } = useOktaAuth();
   const[routine, setRoutine] = useState({});
-  const app_url = 'http://localhost:8080';
+  // const app_url = 'http://localhost:8080';
+  const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
 
   let loaded = false;
   function createData(wrkt, sets) {
