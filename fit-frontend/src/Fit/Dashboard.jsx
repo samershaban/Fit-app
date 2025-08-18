@@ -279,8 +279,10 @@ export const Dashboard = () => {
 
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper elevation={3} style={{padding: "16px"}}>
+        <Grid item xs={12} md={6} >
+          <Paper elevation={3} style={{padding: "16px", height: "100%",
+                                      display: "flex",
+                                      flexDirection: "column"}} >
             <Typography variant="h5">Todays Workout</Typography>
           </Paper>
         </Grid>

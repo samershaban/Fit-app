@@ -103,7 +103,10 @@ export const Routine = ({options, loggedIn}) => {
 
  const tables = rows.map((row, i) => (
   <div className='item'>
-    <TableContainer sx={{ maxWidth: 300 }} component={Paper}>
+    <TableContainer sx={{ maxWidth: 300 }} component={Paper} elevation={3} style={{height: "100%",
+                                                                    display: "flex",
+                                                                    flexDirection: "column",
+                                                                    justifyContent: "space-between",}}>
       <Table sx={{  }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
