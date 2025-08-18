@@ -3,7 +3,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { LineChart } from '@mui/x-charts/LineChart';
 import './Dashboard.css'
-import { Button, Grid, Card, Paper, InputAdornment, TextField, Typography } from "@mui/material";
+import { Button, Grid, Card, Paper, InputAdornment, TextField, Typography, Box } from "@mui/material";
 import { app_url } from "../config/config";
 const stackStrategy = {
   stack: 'total',
@@ -235,25 +235,33 @@ export const Dashboard = () => {
         <Grid item xs={12} md={6}>
           <Paper elevation={3} style={{padding: "16px"}}>
           <Typography variant="h5">Weight</Typography>
-          <br/>
-          <TextField
-            label="Weight"
-            // id="outlined-start-adornment"
-            id="demo-simple-select-label"
-            value={weight}
-            size='2'
-            sx={{ m: 1, width: '22.2ch' }}
-            onKeyDown={(evt) => ["e", "E", "+", "-", "."].includes(evt.key) && evt.preventDefault()}
-            inputProps={{
-              endadornment: <InputAdornment position="start">lbs</InputAdornment>,
-              type: 'number',
-              min: 0,
-              max: 999,
-              length: 3
-            }}
-            onChange={handleChangeWeight}
-          />
-          <button onClick={addWeight} type="button" className="btn btn-primary">Check in Weight</button>
+
+          <Box sx={{ display: "flex", alignItems: "center"}}>
+            <TextField
+              label="Weight"
+              // id="outlined-start-adornment"
+              id="demo-simple-select-label"
+              value={weight}
+              size='2'
+              sx={{ m: 1, width: '22.2ch' }}
+              onKeyDown={(evt) => ["e", "E", "+", "-", "."].includes(evt.key) && evt.preventDefault()}
+              inputProps={{
+                endadornment: <InputAdornment position="start">lbs</InputAdornment>,
+                type: 'number',
+                min: 0,
+                max: 999,
+                length: 3
+              }}
+              onChange={handleChangeWeight}
+            />
+            <button 
+              onClick={addWeight} 
+              type="button" 
+              className="btn btn-primary"
+              sx={{ height: "40px" }} >
+              Check in Weight
+            </button>
+          </Box>
           <div>
 
           <LineChart
