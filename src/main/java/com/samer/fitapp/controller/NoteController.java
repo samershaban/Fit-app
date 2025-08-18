@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@CrossOrigin("http://localhost:3000")
-@CrossOrigin("http://fitapp.us-east-2.elasticbeanstalk.com")
+@CrossOrigin("http://localhost:3000")
+//@CrossOrigin("http://fitapp.us-east-2.elasticbeanstalk.com")
 @RestController
 @RequestMapping("/api/notes")
 public class NoteController {

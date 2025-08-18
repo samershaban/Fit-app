@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { LineChart } from '@mui/x-charts/LineChart';
 import './Dashboard.css'
 import { Button, Grid, Card, Paper, InputAdornment, TextField, Typography } from "@mui/material";
-
+import { app_url } from "../config/config";
 const stackStrategy = {
   stack: 'total',
   area: true,
@@ -40,7 +40,7 @@ export const Dashboard = () => {
   const [colorY, setColorY] = useState('None');
   
   // const app_url = 'http://localhost:8080';
-  const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
+  // const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
 
   const bodyRef = useRef(null);
 

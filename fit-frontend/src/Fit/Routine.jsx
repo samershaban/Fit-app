@@ -4,7 +4,9 @@ import { Link } from "react-router-dom"
 import axios from 'axios';
 import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
+import { app_url } from "../config/config";
 import './Start/Finished.css';
+
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
@@ -13,7 +15,7 @@ export const Routine = ({options, loggedIn}) => {
   const { authState } = useOktaAuth();
   const[routine, setRoutine] = useState({});
   // const app_url = 'http://localhost:8080';
-  const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
+  // const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
 
   let loaded = false;
   function createData(wrkt, sets) {

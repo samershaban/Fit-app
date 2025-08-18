@@ -287,11 +287,11 @@ export const StartPage = () => {
       {authState?.isAuthenticated ?
       <>
         <p>Go to my dashboard</p>
-        <Link type="button" className="btn main-color btn-lg text-white" to="/dashboard">Dashboard</Link>
+        <Link type="button" className="btn main-color btn-lg text-white" to="/dashboard" style={{marginBottom: "8px"}}>Dashboard</Link>
       </>:
       <>
         <p>Login to save data</p>
-        <Link type="button" className="btn main-color btn-lg text-white" to="/login">Login</Link>
+        <Link type="button" className="btn main-color btn-lg text-white" to="/login" style={{marginBottom: "8px"}}>Login</Link>
       </>
       }
       
