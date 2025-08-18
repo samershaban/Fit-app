@@ -12,6 +12,7 @@ import { LoginCallback, SecureRoute, Security } from '@okta/okta-react';
 import { StartPage } from './Fit/Start/StartPage';
 import { Routine } from './Fit/Routine';
 import { Account } from './Fit/Account';
+import { Calendar } from './Fit/Calendar';
 
 const oktaAuth = new OktaAuth(oktaConfig);
 
@@ -56,6 +57,9 @@ function App() {
             </Route>
             <SecureRoute path='/account'>
               <Account/>
+            </SecureRoute>
+            <SecureRoute path='/calendar'>
+              <Calendar/>
             </SecureRoute>
             {/* <SecureRoute path='/home'> <HomePage/> </SecureRoute> */}
             <Route path="/login/callback" render={(props) => <LoginCallback {...props} onAuthResume={onAuthResume} />} />
