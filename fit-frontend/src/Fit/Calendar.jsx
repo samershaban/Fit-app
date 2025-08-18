@@ -51,12 +51,11 @@ export const Calendar = () => {
               </LocalizationProvider>
             </Grid>
             <Grid item xs={12} md={6}>
-              
               {workouts.map((workout, index) => (
                 <Grid item key={index}>
                   <Paper elevation={3} style={{
                   padding: "16px",
-                  marginBottom: "8px", // adds extra spacing if needed
+                  marginBottom: "8px",
                 }}>
                     <Typography variant="h6">{workout.name}</Typography>
                     <Typography variant="body2">
@@ -65,7 +64,6 @@ export const Calendar = () => {
                   </Paper>
                 </Grid>
               ))}
-
             </Grid>
           </Grid>
         </div>

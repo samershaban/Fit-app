@@ -233,7 +233,7 @@ export const Dashboard = () => {
       <h1>Welcome to Fit App</h1>
       <Grid container spacing={2}>
         <Grid item xs={12} md={6}>
-          <Paper variant="outlined" style={{padding: 5}}>
+          <Paper elevation={3} style={{padding: "16px"}}>
           <Typography variant="h5">Weight</Typography>
           <br/>
           <TextField
@@ -280,12 +280,12 @@ export const Dashboard = () => {
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
-          <Paper variant="outlined" style={{padding: 5}}>
+          <Paper elevation={3} style={{padding: "16px"}}>
             <Typography variant="h5">Todays Workout</Typography>
           </Paper>
         </Grid>
         <Grid item xs={12}>
-        <Paper variant="outlined" style={{padding: 5}}>
+        <Paper elevation={3} style={{padding: "16px", marginBottom: "8px"}}>
           <Typography variant="h5">Diet</Typography>
           <p>coming soon</p>
         </Paper>

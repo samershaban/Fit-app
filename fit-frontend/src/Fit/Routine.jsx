@@ -146,7 +146,11 @@ export const Routine = ({options, loggedIn}) => {
       </>
       }
       <p>Create routine</p>
-        <Link type="button" className="btn main-color btn-lg text-white" to="/start">Start</Link>
+        <Link type="button" className="btn main-color btn-lg text-white" to="/start"
+          style={{marginBottom: "8px"}}
+        >
+          Start
+        </Link>
       </>}
     </div>
   )
