@@ -3,8 +3,9 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { LineChart } from '@mui/x-charts/LineChart';
 import './Dashboard.css'
-import { Button, Grid, Card, Paper, InputAdornment, TextField, Typography, Box } from "@mui/material";
+import { Grid, Paper, InputAdornment, TextField, Typography, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { app_url } from "../config/config";
+import { RoutineTable } from "./RoutineTable"
 const stackStrategy = {
   stack: 'total',
   area: true,
@@ -38,11 +39,14 @@ export const Dashboard = () => {
   ]);
   const [colorX, setColorX] = useState('None');
   const [colorY, setColorY] = useState('None');
+
+  const today = new Date();
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  const dayOfWeek = days[today.getDay()];//Sunday
   
   // const app_url = 'http://localhost:8080';
   // const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
-
-  const bodyRef = useRef(null);
 
   useEffect(() => {
 
@@ -104,14 +108,6 @@ export const Dashboard = () => {
   const handleTitleTextChange = (e) => {
     console.log(e.target.value);
     setSelectedNoteTitle(e.target.value);
-  }
-
-
-  const selectNote = (i) => {
-    setSelectedNote(i);
-    setSelectedNoteBody(notes[i].body);
-    setSelectedNoteTitle(notes[i].title);
-    // console.log(selectedNote);
   }
 
   const addWeight = () => {
@@ -292,6 +288,8 @@ export const Dashboard = () => {
                                       display: "flex",
                                       flexDirection: "column"}} >
             <Typography variant="h5">Todays Workout</Typography>
+            {/* <h1>Your current routine</h1> */}
+            <div className='flex'><RoutineTable days={dayOfWeek}></RoutineTable></div>
           </Paper>
         </Grid>
         <Grid item xs={12}>

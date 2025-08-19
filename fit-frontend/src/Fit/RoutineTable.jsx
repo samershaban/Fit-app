@@ -10,7 +10,7 @@ import './Start/Finished.css';
 const steps = ['Goals', 'Basic Info', 'Routine'];
 
 // Main Component
-export const Routine = ({options, loggedIn}) => {
+export const RoutineTable = ({options, loggedIn, days}) => {
 
   const { authState } = useOktaAuth();
   const[routine, setRoutine] = useState({});
@@ -22,6 +22,7 @@ export const Routine = ({options, loggedIn}) => {
     return { wrkt, sets };
   }
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+  const dayIndex = daysOfWeek.indexOf(days);
   let strength = false;
   const [rows, setRows] = useState([
     [],
@@ -75,6 +76,8 @@ export const Routine = ({options, loggedIn}) => {
   }
 
   useEffect(() => {
+    console.log("current day:"+days);
+    console.log("day index:"+ dayIndex);
     // if not logged in and has local storage
     if(!authState?.isAuthenticated && localStorage.getItem('workout')) {
       getLocalRoutine();
@@ -108,7 +111,7 @@ export const Routine = ({options, loggedIn}) => {
     }
   }, [authState])
 
- const tables = rows.map((row, i) => (
+ const tables = dayIndex>=0?(
   <div className='item'>
     <TableContainer sx={{ maxWidth: 300 }} component={Paper} elevation={3} style={{height: "100%",
                                                                     display: "flex",
@@ -117,12 +120,12 @@ export const Routine = ({options, loggedIn}) => {
       <Table sx={{  }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>
-            <TableCell>{daysOfWeek[i]}</TableCell>
+            <TableCell>{days}</TableCell>
             <TableCell align="right">Sets</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {row.map((r, i) => (
+          {rows[dayIndex].map((r, i) => (
             <TableRow
               key={i}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -137,11 +140,10 @@ export const Routine = ({options, loggedIn}) => {
       </Table>
     </TableContainer>
   </div>
-))
+):<>Nothing today</>
 
   return(
     <div className="container mt-3">
-      <h1>Your current routine</h1>
       <div className='flex'>{tables}</div>
       {/* {JSON.stringify(routine)} */}
       {options===true && <>

@@ -8,6 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { StaticDatePicker } from '@mui/x-date-pickers/StaticDatePicker';
 import { CalendarPicker } from '@mui/x-date-pickers/CalendarPicker';
 import { Grid, Paper, Typography } from "@mui/material";
+import { RoutineTable } from "./RoutineTable";
 
 // import './Dashboard.css'
 
@@ -25,12 +26,15 @@ export const Calendar = () => {
     { name: "Bicep Curls", sets: 4, reps: 12 },
   ];
 
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
   useEffect(() => {
     // console.log(authState.idToken.claims.email);
   },[])
   
   useEffect(() => {
     console.log(date.format("YYYY-MM-DD"));
+    console.log(days[date.day()]);
   },[date])
 
   const handleChange = (newDate) => {
@@ -50,20 +54,10 @@ export const Calendar = () => {
                 <CalendarPicker date={date} onChange={(newDate) => handleChange(newDate)} />
               </LocalizationProvider>
             </Grid>
-            <Grid item xs={12} md={6}>
-              {workouts.map((workout, index) => (
-                <Grid item key={index}>
-                  <Paper elevation={3} style={{
-                  padding: "16px",
-                  marginBottom: "8px",
-                }}>
-                    <Typography variant="h6">{workout.name}</Typography>
-                    <Typography variant="body2">
-                      Sets: {workout.sets} | Reps: {workout.reps}
-                    </Typography>
-                  </Paper>
-                </Grid>
-              ))}
+            <Grid item xs={12} md={6} container 
+                justifyContent="center">
+              <div ><RoutineTable days={days[date.day()]}></RoutineTable></div>
+
             </Grid>
           </Grid>
         </div>

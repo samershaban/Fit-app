@@ -37,10 +37,10 @@ export const Navbar = () => {
             </li>
             {authState.isAuthenticated && <>
             <li className="nav-item">
-              <NavLink className='nav-link' to='/account'>Account</NavLink>
+              <NavLink className='nav-link' to='/calendar'>Calendar</NavLink>
             </li>
             <li className="nav-item">
-              <NavLink className='nav-link' to='/calendar'>Calendar</NavLink>
+              <NavLink className='nav-link' to='/account'>Account</NavLink>
             </li>
             </>}
           </ul>
