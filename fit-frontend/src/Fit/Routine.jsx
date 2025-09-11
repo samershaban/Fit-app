@@ -31,6 +31,23 @@ export const Routine = ({options, loggedIn}) => {
     []
   ]);
 
+  const getNewCustomRoutine = async () => {
+      const url = `${app_url}/api/routines/create`;
+      const requestOptions = {
+        // method: 'POST',
+        headers: {
+          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          'Content-Type': 'application/json',
+        }
+      };
+      axios.post(url, requestOptions)
+      .then((res) =>{
+        console.log(res.data);
+      }).catch(err => {
+        console.log(err);
+      })
+  }
+
   const fetchRoutine = async () => {
   // console.log(authState);
   
@@ -75,6 +92,7 @@ export const Routine = ({options, loggedIn}) => {
   }
 
   useEffect(() => {
+    getNewCustomRoutine();
     // if not logged in and has local storage
     if(!authState?.isAuthenticated && localStorage.getItem('workout')) {
       getLocalRoutine();
@@ -92,17 +110,10 @@ export const Routine = ({options, loggedIn}) => {
   },[]);
 
   useEffect(() => {
-    // setRows([
-    //   [],
-    //   [],
-    //   [],
-    //   [],
-    //   []
-    // ]);
+    
     if(loaded==false){
       fetchRoutine();
       console.log(routine);
-      console.log(authState);
     } else {
       console.log('already loaded');
     }
@@ -110,10 +121,13 @@ export const Routine = ({options, loggedIn}) => {
 
  const tables = rows.map((row, i) => (
   <div className='item'>
-    <TableContainer sx={{ maxWidth: 300 }} component={Paper} elevation={3} style={{height: "100%",
-                                                                    display: "flex",
-                                                                    flexDirection: "column",
-                                                                    justifyContent: "space-between",}}>
+    <TableContainer 
+      sx={{ maxWidth: 300 }}
+      component={Paper} elevation={3} style={{height: "100%",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",}}
+    >
       <Table sx={{  }} size="small" aria-label="a dense table">
         <TableHead>
           <TableRow>

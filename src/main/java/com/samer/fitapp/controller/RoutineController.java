@@ -12,7 +12,7 @@ import java.util.List;
 @CrossOrigin("http://localhost:3000")
 //@CrossOrigin("http://fitapp.us-east-2.elasticbeanstalk.com")
 @RestController
-@RequestMapping("/api/routine")
+@RequestMapping("/api/routines")
 public class RoutineController {
     private RoutineService routineService;
 
@@ -24,6 +24,11 @@ public class RoutineController {
     @PostMapping("/create")
     public List<String> createWorkoutRoutine() {
         return routineService.createRoutine();
+    }
+
+    @GetMapping("/create")
+    public List<String> getWorkoutRoutine() {
+        return routineService.getRoutine();
     }
 
 

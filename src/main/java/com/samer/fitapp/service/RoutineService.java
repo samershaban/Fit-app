@@ -11,11 +11,15 @@ import java.util.Collections;
 import java.util.List;
 
 @Service
-//@Transactional
+@Transactional
 public class RoutineService {
 
-//    private NoteRepository noteRepository;
+//    private RoutineRepository routineRepository;
     public List<String> createRoutine() {
+        return new ArrayList<>();
+    }
+
+    public List<String> getRoutine() {
         return new ArrayList<>();
     }
 

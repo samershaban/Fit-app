@@ -111,7 +111,7 @@ export const Dashboard = () => {
   }
 
   const addWeight = () => {
-    const url = `${app_url}/api/weights/byUserEmail`;
+      const url = `${app_url}/api/weights/byUserEmail`;
       const requestOptions = {
         method: 'POST',
         url: url,
