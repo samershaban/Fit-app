@@ -32,13 +32,14 @@ export const Routine = ({options, loggedIn}) => {
   ]);
 
   const getNewCustomRoutine = async () => {
-      const url = `${app_url}/api/routines/create`;
+      const url = `${app_url}/api/routines/generate`;
       const requestOptions = {
-        // method: 'POST',
+        method: 'POST',
         headers: {
           Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
-          'Content-Type': 'application/json',
-        }
+          "Content-Type": "application/json",
+        },
+        type:"strength",daysPerWeek:3,goal:"muscle_gain",experience:"beginner",exerciseId:2
       };
       axios.post(url, requestOptions)
       .then((res) =>{
