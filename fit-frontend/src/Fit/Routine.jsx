@@ -30,7 +30,7 @@ export const Routine = ({options, loggedIn}) => {
     [],
     []
   ]);
-
+  
   const getNewCustomRoutine = async () => {
       const url = `${app_url}/api/routines/generate`;
       const requestOptions = {
