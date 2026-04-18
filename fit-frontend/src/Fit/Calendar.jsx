@@ -14,7 +14,7 @@ import { RoutineTable } from "./RoutineTable";
 
 export const Calendar = () => {
 
-  const {authState} = useOktaAuth();
+  // const {authState} = useOktaAuth();
   const today = new Date();
   const [date, setDate] = React.useState(dayjs( today ));
 

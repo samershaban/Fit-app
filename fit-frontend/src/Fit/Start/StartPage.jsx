@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
-import { useOktaAuth } from "@okta/okta-react";
+// import { useOktaAuth } from "@okta/okta-react";
+import { useAuth0 } from "@auth0/auth0-react";
 import { Link } from "react-router-dom"
 import Box from '@mui/material/Box';
 import Stepper from '@mui/material/Stepper';
@@ -19,7 +20,23 @@ const steps = ['Goals', 'Basic Info', 'Routine'];
 // Main Component
 export const StartPage = () => {
 
-  const { authState } = useOktaAuth();
+  // const { authState } = useOktaAuth();
+  const {
+    isLoading, // Loading state, the SDK needs to reach Auth0 on load
+    isAuthenticated,
+    error,
+    loginWithRedirect: login, // Starts the login flow
+    logout: auth0Logout, // Starts the logout flow
+    user, // User profile
+    getAccessTokenSilently
+  } = useAuth0();
+  const token = null;
+  
+  const signup = () =>
+    login({ authorizationParams: { screen_hint: "signup" } });
+
+  const logout = () =>
+    auth0Logout({ logoutParams: { returnTo: window.location.origin } });
 
   //Active step
   const [activeStep, setActiveStep] = React.useState(0);
@@ -137,9 +154,19 @@ export const StartPage = () => {
   };
 
   // Main Code
-  // useEffect(() => {
-  //   console.log(weight)
-  // }, [weight]);
+  useEffect(() => {
+    // console.log(weight)
+    const getToken = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        console.log("token:", token);
+        this.token = token;
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
+    getToken();
+  }, []);
 
   // On component render
   useEffect(() => {
@@ -284,15 +311,37 @@ export const StartPage = () => {
       ) : (<></>)}
 
     </Box>
-      {authState?.isAuthenticated ?
+    {isAuthenticated ? (
+    <>
+      <p>Logged in as {user.email}</p>
+
+      <h1>User Profile</h1>
+
+      <pre>{JSON.stringify(user, null, 2)}</pre>
+
+      <button onClick={logout}>Logout</button>
+    </>
+  ) : (
+    <>
+      {error && <p>Error: {error.message}</p>}
+
+      <button onClick={signup}>Signup</button>
+
+      <button onClick={login}>Login</button>
+    </>
+  )}
+
+      {isAuthenticated ? (
       <>
         <p>Go to my dashboard</p>
         <Link type="button" className="btn main-color btn-lg text-white" to="/dashboard" style={{marginBottom: "8px"}}>Dashboard</Link>
-      </>:
+      </>
+  ):(
       <>
         <p>Login to save data</p>
         <Link type="button" className="btn main-color btn-lg text-white" to="/login" style={{marginBottom: "8px"}}>Login</Link>
       </>
+  )
       }
       
     </div>

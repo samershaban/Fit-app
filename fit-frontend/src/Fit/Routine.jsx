@@ -5,17 +5,28 @@ import axios from 'axios';
 import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
 import TableCell from '@mui/material/TableCell';
 import { app_url } from "../config/config";
+import { useAuth0 } from "@auth0/auth0-react";
 import './Start/Finished.css';
 
-const steps = ['Goals', 'Basic Info', 'Routine'];
+const steps = ['Goals', 'Basic Info', 'sRoutine'];
 
 // Main Component
 export const Routine = ({options, loggedIn}) => {
 
-  const { authState } = useOktaAuth();
+  // const { authState } = useOktaAuth();
   const[routine, setRoutine] = useState({});
   // const app_url = 'http://localhost:8080';
   // const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
+  
+  const {
+    isLoading, // Loading state, the SDK needs to reach Auth0 on load
+    isAuthenticated,
+    error,
+    loginWithRedirect: login, // Starts the login flow
+    logout: auth0Logout, // Starts the logout flow
+    user, // User profile
+    getAccessTokenSilently
+  } = useAuth0();
 
   let loaded = false;
   function createData(wrkt, sets) {
@@ -31,12 +42,12 @@ export const Routine = ({options, loggedIn}) => {
     []
   ]);
   
-  const getNewCustomRoutine = async () => {
+  const getNewCustomRoutine = async ( token) => {
       const url = `${app_url}/api/routines/generate`;
       const requestOptions = {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         type:"strength",daysPerWeek:3,goal:"muscle_gain",experience:"beginner",exerciseId:2
@@ -49,15 +60,15 @@ export const Routine = ({options, loggedIn}) => {
       })
   }
 
-  const fetchRoutine = async () => {
+  const fetchRoutine = async (token) => {
   // console.log(authState);
   
-    if (authState && authState?.isAuthenticated) {
+    if (isAuthenticated) {
       const url = `${app_url}/api/workout/byUserEmail`;
       const requestOptions = {
         method: 'GET',
         headers: {
-          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         }
       };
@@ -93,21 +104,33 @@ export const Routine = ({options, loggedIn}) => {
   }
 
   useEffect(() => {
-    getNewCustomRoutine();
-    // if not logged in and has local storage
-    if(!authState?.isAuthenticated && localStorage.getItem('workout')) {
-      getLocalRoutine();
-      loaded = true;
-    // if logged in
-    } else if(authState?.isAuthenticated) {
-      if(localStorage.getItem('workout'))
-        getLocalRoutine();
-      else
+    const getToken = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        console.log("token:", token);
+        this.token = token;
         fetchRoutine();
-      loaded = true;
-    } else {
-      console.log('workout empty:'+ authState);
+      } catch (e) {
+        console.log(e.message);
+      }
     }
+    getToken();
+
+    // // getNewCustomRoutine();
+    // // if not logged in and has local storage
+    // if(!isAuthenticated && localStorage.getItem('workout')) {
+    //   getLocalRoutine();
+    //   loaded = true;
+    // // if logged in
+    // } else if(isAuthenticated) {
+    //   if(localStorage.getItem('workout'))
+    //     getLocalRoutine();
+    //   else
+    //     fetchRoutine();
+    //   loaded = true;
+    // } else {
+    //   console.log('workout empty:'+ authState);
+    // }
   },[]);
 
   useEffect(() => {
@@ -118,7 +141,7 @@ export const Routine = ({options, loggedIn}) => {
     } else {
       console.log('already loaded');
     }
-  }, [authState])
+  }, [isAuthenticated])// not sure if will work
 
  const tables = rows.map((row, i) => (
   <div className='item'>
@@ -160,7 +183,7 @@ export const Routine = ({options, loggedIn}) => {
       <div className='flex'>{tables}</div>
       {/* {JSON.stringify(routine)} */}
       {options===true && <>
-      {authState?.isAuthenticated?
+      {isAuthenticated?
       <>
         <p>Go to my dashboard</p>
         <Link type="button" className="btn main-color btn-lg text-white" to="/dashboard">Dashboard</Link>

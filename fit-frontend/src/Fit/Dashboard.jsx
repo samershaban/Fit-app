@@ -6,6 +6,7 @@ import './Dashboard.css'
 import { Grid, Paper, InputAdornment, TextField, Typography, Box, TableContainer, Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import { app_url } from "../config/config";
 import { RoutineTable } from "./RoutineTable"
+import { useAuth0 } from "@auth0/auth0-react";
 const stackStrategy = {
   stack: 'total',
   area: true,
@@ -47,6 +48,14 @@ export const Dashboard = () => {
   
   // const app_url = 'http://localhost:8080';
   // const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
+    const {
+      isLoading, // Loading state, the SDK needs to reach Auth0 on load
+      isAuthenticated,
+      error,
+      loginWithRedirect: login, // Starts the login flow
+      logout: auth0Logout, // Starts the logout flow
+      user, // User profile
+    } = useAuth0();
 
   useEffect(() => {
 
