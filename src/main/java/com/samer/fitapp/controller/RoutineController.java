@@ -4,13 +4,17 @@ import com.samer.fitapp.entity.Note;
 import com.samer.fitapp.service.NoteService;
 import com.samer.fitapp.service.RoutineService;
 import com.samer.fitapp.utils.ExtractJWT;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+//import javax.validation.Valid;
+//import javax.validation.constraints.Min;
+//import javax.validation.constraints.NotBlank;
+//import javax.validation.constraints.NotNull;
 import java.util.List;
 @CrossOrigin("http://localhost:3000")
 //@CrossOrigin("http://fitapp.us-east-2.elasticbeanstalk.com")

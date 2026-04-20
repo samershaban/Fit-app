@@ -1,7 +1,8 @@
 package com.samer.fitapp.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
-import javax.persistence.*;
+//import javax.persistence.*;
 
 @Entity
 @Table(name = "note")

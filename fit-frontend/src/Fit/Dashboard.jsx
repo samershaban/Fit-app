@@ -1,4 +1,4 @@
-import { useOktaAuth } from "@okta/okta-react";
+// import { useOktaAuth } from "@okta/okta-react";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { LineChart } from '@mui/x-charts/LineChart';
@@ -21,7 +21,7 @@ const customize = {
 
 export const Dashboard = () => {
 
-  const {authState} = useOktaAuth();
+  // const {authState} = useOktaAuth();
   const [notes, setNotes] = useState([]);
   const [weights, setWeights] = useState([]);
   const [selectedNote, setSelectedNote] = useState(-1);
@@ -40,6 +40,7 @@ export const Dashboard = () => {
   ]);
   const [colorX, setColorX] = useState('None');
   const [colorY, setColorY] = useState('None');
+  const [tokenState, setTokenState] = useState(null);
 
   const today = new Date();
   const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -55,18 +56,33 @@ export const Dashboard = () => {
       loginWithRedirect: login, // Starts the login flow
       logout: auth0Logout, // Starts the logout flow
       user, // User profile
+      getAccessTokenSilently
     } = useAuth0();
 
   useEffect(() => {
+      
+      const getToken = async () => {
+        try {
+          const token = await getAccessTokenSilently();
+          console.log("token:", token);
+          setTokenState(token);
+          fetchWeights(token);
+        } catch (e) {
+          console.log(e.message);
+        }
+      }
+      getToken();
+    }, [isAuthenticated])// not sure if will work)
 
-    const fetchWeights = async () => {
+
+    const fetchWeights = async (token) => {
     // console.log(authState);
-      if (authState && authState?.isAuthenticated) {
+      if (isAuthenticated) {
         const url = `${app_url}/api/weights/byUserEmail`;
         const requestOptions = {
           method: 'GET',
           headers: {
-            Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
           }
         };
@@ -81,10 +97,7 @@ export const Dashboard = () => {
           console.log(err);
         })
       }
-    }
-    fetchWeights();
-
- }, [authState])
+    };
 
 
  useEffect(() => {
@@ -125,7 +138,7 @@ export const Dashboard = () => {
         method: 'POST',
         url: url,
         headers: {
-          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          Authorization: `Bearer ${tokenState}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -153,7 +166,7 @@ export const Dashboard = () => {
         method: 'POST',
         url: url,
         headers: {
-          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          Authorization: `Bearer ${tokenState}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -186,7 +199,7 @@ export const Dashboard = () => {
         method: 'DELETE',
         url: url,
         headers: {
-          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          Authorization: `Bearer ${tokenState}`,
           'Content-Type': 'application/json',
         }
       };
@@ -212,7 +225,7 @@ export const Dashboard = () => {
         method: 'PUT',
         url: url,
         headers: {
-          Authorization: `Bearer ${authState?.accessToken?.accessToken}`,
+          Authorization: `Bearer ${tokenState}`,
           'Content-Type': 'application/json',
         },
         data: {
@@ -298,7 +311,7 @@ export const Dashboard = () => {
                                       flexDirection: "column"}} >
             <Typography variant="h5">Todays Workout</Typography>
             {/* <h1>Your current routine</h1> */}
-            <div className='flex'><RoutineTable days={dayOfWeek}></RoutineTable></div>
+            {/* <div className='flex'><RoutineTable days={dayOfWeek}></RoutineTable></div> */}
           </Paper>
         </Grid>
         <Grid item xs={12}>

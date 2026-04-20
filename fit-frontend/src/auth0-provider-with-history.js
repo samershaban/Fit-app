@@ -5,8 +5,8 @@ import { useHistory } from "react-router-dom";
 export const Auth0ProviderWithHistory = ({ children }) => {
   const history = useHistory();
 
-  const domain = "dev-4yozs5k5nw3lrgnm.us.auth0.com"
-  const clientId = "5Bt3sNwAr3VRm3bpudICDXnexrJ3bIUl"
+  const domain = process.env.REACT_APP_OKTA_DOMAIN;
+  const clientId = process.env.REACT_APP_OKTA_CLIENT_ID;
   const redirectUri = window.location.origin;
 
   const onRedirectCallback = (appState) => {
@@ -23,6 +23,8 @@ export const Auth0ProviderWithHistory = ({ children }) => {
       clientId={clientId}
       authorizationParams={{
         redirect_uri: redirectUri,
+        // audience: {OKTA_AUDIENCE2},
+        audience: process.env.REACT_APP_OKTA_AUDIENCE,
       }}
       onRedirectCallback={onRedirectCallback}
     >

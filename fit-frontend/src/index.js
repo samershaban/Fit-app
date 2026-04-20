@@ -13,8 +13,8 @@ root.render(
     <StrictMode>
       <BrowserRouter>
         <Auth0ProviderWithHistory
-          domain="dev-4yozs5k5nw3lrgnm.us.auth0.com"
-          clientId="5Bt3sNwAr3VRm3bpudICDXnexrJ3bIUl"
+          domain={process.env.REACT_APP_OKTA_DOMAIN}
+          clientId={process.env.REACT_APP_OKTA_CLIENT_ID}
           authorizationParams={{ redirect_uri: window.location.origin }}
         >
           <App />

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useOktaAuth } from "@okta/okta-react";
+// import { useOktaAuth } from "@okta/okta-react";
 import { Link } from "react-router-dom"
 import axios from 'axios';
 import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
@@ -15,7 +15,7 @@ export const Routine = ({options, loggedIn}) => {
 
   // const { authState } = useOktaAuth();
   const[routine, setRoutine] = useState({});
-  // const app_url = 'http://localhost:8080';
+  const app_url = 'http://localhost:8080';
   // const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
   
   const {
@@ -75,7 +75,7 @@ export const Routine = ({options, loggedIn}) => {
       axios.get(url, requestOptions)
       .then((res) =>{
         let wr = JSON.parse(res.data.workout);
-        console.log(wr);
+        console.log("routine:",wr);
         
         for(let d=0;d<wr.DailyRoutines.length;d++) {
           for(let i=0;i<wr.DailyRoutines[d].routine.length;i++) {
@@ -103,44 +103,49 @@ export const Routine = ({options, loggedIn}) => {
       setRoutine(wr);
   }
 
+  // useEffect(() => {
+  //   const getToken = async () => {
+  //     try {
+  //       const token = await getAccessTokenSilently();
+  //       console.log("token:", token);
+  //       // this.token = token;
+  //       fetchRoutine(token);
+  //     } catch (e) {
+  //       console.log(e.message);
+  //     }
+  //   }
+  //   getToken();
+
+  //   // // getNewCustomRoutine();
+  //   // // if not logged in and has local storage
+  //   // if(!isAuthenticated && localStorage.getItem('workout')) {
+  //   //   getLocalRoutine();
+  //   //   loaded = true;
+  //   // // if logged in
+  //   // } else if(isAuthenticated) {
+  //   //   if(localStorage.getItem('workout'))
+  //   //     getLocalRoutine();
+  //   //   else
+  //   //     fetchRoutine();
+  //   //   loaded = true;
+  //   // } else {
+  //   //   console.log('workout empty:'+ authState);
+  //   // }
+  // },[]);
+
   useEffect(() => {
+    
     const getToken = async () => {
       try {
         const token = await getAccessTokenSilently();
         console.log("token:", token);
-        this.token = token;
-        fetchRoutine();
+        // this.token = token;
+        fetchRoutine(token);
       } catch (e) {
         console.log(e.message);
       }
     }
     getToken();
-
-    // // getNewCustomRoutine();
-    // // if not logged in and has local storage
-    // if(!isAuthenticated && localStorage.getItem('workout')) {
-    //   getLocalRoutine();
-    //   loaded = true;
-    // // if logged in
-    // } else if(isAuthenticated) {
-    //   if(localStorage.getItem('workout'))
-    //     getLocalRoutine();
-    //   else
-    //     fetchRoutine();
-    //   loaded = true;
-    // } else {
-    //   console.log('workout empty:'+ authState);
-    // }
-  },[]);
-
-  useEffect(() => {
-    
-    if(loaded==false){
-      fetchRoutine();
-      console.log(routine);
-    } else {
-      console.log('already loaded');
-    }
   }, [isAuthenticated])// not sure if will work
 
  const tables = rows.map((row, i) => (

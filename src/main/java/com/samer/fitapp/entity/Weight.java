@@ -1,10 +1,11 @@
 package com.samer.fitapp.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.persistence.*;
+//import javax.persistence.*;
 import java.util.Date;
 
 @Entity
