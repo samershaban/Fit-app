@@ -29,8 +29,12 @@ export const Dashboard = () => {
   const greeting = today.getHours() < 12 ? 'Good morning' : today.getHours() < 18 ? 'Good afternoon' : 'Good evening';
   const dayIndex = WEEKDAYS.indexOf(dayOfWeek);
 
-  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
-  const firstName = user?.name?.split(' ')[0] ?? 'there';
+  const { 
+    isAuthenticated, 
+    user,
+    getAccessTokenSilently 
+  } = useAuth0();
+  const firstName = user?.nickname?.split(' ')[0] ?? 'there';
 
   useEffect(() => {
     const getToken = async () => {
