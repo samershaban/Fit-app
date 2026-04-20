@@ -7,6 +7,7 @@ import {
   InputAdornment, Chip,
 } from "@mui/material";
 import { app_url } from "../config/config";
+import { RoutineTable } from "./RoutineTable";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export const Dashboard = () => {
@@ -203,21 +204,8 @@ export const Dashboard = () => {
               }}
             />
 
-            <Box sx={{
-              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-              py: 4, gap: 1, flexGrow: 1,
-            }}>
-              <Typography variant="body2" color="text.secondary">
-                No routine set up yet.
-              </Typography>
-              <Button
-                variant="text"
-                size="small"
-                href="/start"
-                sx={{ color: 'primary.main', fontWeight: 600 }}
-              >
-                Create one →
-              </Button>
+            <Box sx={{ flexGrow: 1, '& .container': { p: 0, m: 0 } }}>
+              <RoutineTable days={dayOfWeek} />
             </Box>
 
             <Button
