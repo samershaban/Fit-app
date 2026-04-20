@@ -1,4 +1,6 @@
 import React, { useEffect } from 'react';
+import { useOktaAuth } from "@okta/okta-react";
+import { useAuth0 } from "@auth0/auth0-react";
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
@@ -10,6 +12,9 @@ import { create, print } from '../WeeklyRoutineService';
 import { pull } from '../DailyRoutineService';
 import './Finished.css'
 import { WeeklyRoutine } from '../WeeklyRoutine';
+import axios from 'axios';
+import { Routine } from '../Routine';
+import { app_url } from "../../config/config";
 // Table
 function createData(wrkt, sets) {
   return { wrkt, sets };
@@ -23,15 +28,52 @@ let rows = [
   []
 ];
 
-
 export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
 
+  const {
+    isLoading, // Loading state, the SDK needs to reach Auth0 on load
+    isAuthenticated,
+    error,
+    loginWithRedirect: login, // Starts the login flow
+    logout: auth0Logout, // Starts the logout flow
+    user, // User profile
+    getAccessTokenSilently
+  } = useAuth0();
+  const token = null;
+
+  
+  // const { authState } = useOktaAuth();
+  // const app_url = 'http://localhost:8080';
+  // const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
   const { upper, lower, core } = bodys;
-
   const {general, strength, bodybuilding, calisthenics} = workouts;
-
-  // Generating Routine 
+  let wr = [];
+  // Generating Routine
   const [progress, setProgress] = React.useState(0);
+
+  const postRoutine = async (token) => {
+    // console.log(authState);
+    if (useAuth0.getAccessTokenSilently) {
+      const url = `${app_url}/api/workout/byUserEmail`;
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      };
+      axios.post(url, {
+        email: "adminuser@email.com",
+        workout: JSON.stringify(wr)
+      }, requestOptions
+      ).then((res) =>{
+        console.log(JSON.parse(res.data.workout));
+        // setRoutine(res.data.workout);
+      }).catch(err => {
+        console.log(err);
+      })
+    }
+  }
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -54,8 +96,22 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
     ];
 
     console.log('bodys', bodys);
-    let wr = create(daysPerWeek, min, workouts, bodys);
+    wr = create(daysPerWeek, min, workouts, bodys);
     console.log(wr);
+    // create use effect to wait for token to be generated before posting routine
+    const getToken = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        console.log("token:", token);
+        this.token = token;
+        postRoutine(token);
+      } catch (e) {
+        console.log(e.message);
+      }
+    }
+    getToken();
+    
+
     // let dr = new DailyRoutine("Push Day", min, []);
     // dr.getRoutine();
     // if(upper) {
@@ -77,12 +133,15 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
         rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
       }
     }
+    localStorage.setItem('workout', JSON.stringify(wr));
   });
   // fix glitch
   useEffect(() => {
     setProgress(0);
     console.log(rows);
   }, [activeStep]);
+
+
   const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
   const tables = rows.map((row, i) => (
     <div className='item'>
@@ -114,7 +173,7 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
 
   return(
     <>
-      <Typography sx={{ mt: 2, mb: 1 }}>Generating Routine</Typography>
+      <Typography sx={{ mt: 2, mb: 1 }}>Creating Routine</Typography>
       <Container fixed sx={{ margin: 0 }} >
         <Box sx={{  }}>
         {/* <Box sx={{ flexGrow: 1 }}> */}
@@ -129,33 +188,8 @@ export const Finished = ({activeStep, bodys, daysPerWeek, min, workouts}) => {
         <br/>
         <Button onClick={print}>output</Button>
         {/* {progress >=100?  */}
-        {/* <> */}
         <div className='flex'>{tables}</div>
-          {/* <TableContainer sx={{ maxWidth: 300 }} component={Paper}>
-            <Table sx={{  }} size="small" aria-label="a dense table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Monday</TableCell>
-                  <TableCell align="right">Sets</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {rows[0].map((row, i) => (
-                  <TableRow
-                    key={i}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      {row.wrkt}
-                    </TableCell>
-                    <TableCell align="right">{row.sets}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer> */}
-        {/* </>:<></>} */}
-        
+        {/* <Routine options={false}></Routine> */}
         </Box>
       </Container>
     </>

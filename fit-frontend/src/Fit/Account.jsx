@@ -1,12 +1,21 @@
-import { useOktaAuth } from "@okta/okta-react";
+// import { useOktaAuth } from "@okta/okta-react";
 import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
-
+import { useAuth0 } from "@auth0/auth0-react";
 // import './Dashboard.css'
 
 export const Account = () => {
 
-  const {authState} = useOktaAuth();
+  // const {authState} = useOktaAuth();
+  const {
+    isLoading, // Loading state, the SDK needs to reach Auth0 on load
+    isAuthenticated,
+    error,
+    loginWithRedirect: login, // Starts the login flow
+    logout: auth0Logout, // Starts the logout flow
+    user, // User profile
+    getAccessTokenSilently
+  } = useAuth0();
 
   useEffect(() => {
     // console.log(authState.idToken.claims.email);
@@ -22,8 +31,20 @@ export const Account = () => {
             <p>Email</p>
           </div>
           <div className="col-4" style={{paddingBottom: "5px"}}>
-            <p>{(authState && authState.isAuthenticated)? (authState.idToken.claims.name): ''}</p>
-            <p>{(authState && authState.isAuthenticated)? (authState.idToken.claims.email): ''}</p>
+            <p>
+              {isAuthenticated ? (
+                <>
+                  <p>Logged in as {user.nickname}</p>
+
+
+                  <p>{user.email}</p>
+
+                </>
+              ): (
+                <>
+                </>
+              )}
+            </p>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import FormControl from '@mui/material/FormControl';
@@ -6,6 +6,11 @@ import { Container, Grid, InputAdornment, MenuItem, Select, TextField } from '@m
 import InputLabel from '@mui/material/InputLabel';
 
 export const BasicInfo = ({feet, handleChangeFeet, inches, handleChangeInches, weight, handleChangeWeight}) => {
+const [bmi, setBmi] = useState(0);
+
+useEffect(() => {
+  setBmi((weight / Math.pow(feet*12 + inches, 2)*703).toFixed(2));
+}, [feet, inches, weight]);
 
   return(
     <>
@@ -86,7 +91,7 @@ export const BasicInfo = ({feet, handleChangeFeet, inches, handleChangeInches, w
                   onChange={handleChangeWeight}
                 />
               </FormControl>
-              <Typography sx={{ mt: 2, mb: 1 }} >Your BMI is:</Typography>
+              <Typography sx={{ mt: 2, mb: 1 }} >Your BMI is: {bmi}</Typography>
             </Grid>
           </Grid>
         </Box>
