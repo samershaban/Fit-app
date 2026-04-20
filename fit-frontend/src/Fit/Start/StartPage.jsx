@@ -311,38 +311,38 @@ export const StartPage = () => {
       ) : (<></>)}
 
     </Box>
+    {/* {isAuthenticated ? (
+      <>
+        <p>Logged in as {user.email}</p>
+
+        <h1>User Profile</h1>
+
+        <pre>{JSON.stringify(user, null, 2)}</pre>
+
+        <button onClick={logout}>Logout</button>
+      </>
+    ) : (
+      <>
+        {error && <p>Error: {error.message}</p>}
+
+        <button onClick={signup}>Signup</button>
+
+        <button onClick={login}>Login</button>
+      </>
+    )} */}
+
     {isAuthenticated ? (
-    <>
-      <p>Logged in as {user.email}</p>
-
-      <h1>User Profile</h1>
-
-      <pre>{JSON.stringify(user, null, 2)}</pre>
-
-      <button onClick={logout}>Logout</button>
-    </>
-  ) : (
-    <>
-      {error && <p>Error: {error.message}</p>}
-
-      <button onClick={signup}>Signup</button>
-
-      <button onClick={login}>Login</button>
-    </>
-  )}
-
-      {isAuthenticated ? (
       <>
         <p>Go to my dashboard</p>
         <Link type="button" className="btn main-color btn-lg text-white" to="/dashboard" style={{marginBottom: "8px"}}>Dashboard</Link>
       </>
-  ):(
+    ):(
       <>
+        {error && <p>Error: {error.message}</p>}
         <p>Login to save data</p>
-        <Link type="button" className="btn main-color btn-lg text-white" to="/login" style={{marginBottom: "8px"}}>Login</Link>
+        <Link type="button" className="btn main-color btn-lg text-white" onClick={login} style={{marginBottom: "8px"}}>Login</Link>
       </>
-  )
-      }
+    )}
       
     </div>
   )

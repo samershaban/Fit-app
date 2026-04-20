@@ -49,15 +49,15 @@ export const Dashboard = () => {
   
   // const app_url = 'http://localhost:8080';
   // const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
-    const {
-      isLoading, // Loading state, the SDK needs to reach Auth0 on load
-      isAuthenticated,
-      error,
-      loginWithRedirect: login, // Starts the login flow
-      logout: auth0Logout, // Starts the logout flow
-      user, // User profile
-      getAccessTokenSilently
-    } = useAuth0();
+  const {
+    isLoading, // Loading state, the SDK needs to reach Auth0 on load
+    isAuthenticated,
+    error,
+    loginWithRedirect: login, // Starts the login flow
+    logout: auth0Logout, // Starts the logout flow
+    user, // User profile
+    getAccessTokenSilently
+  } = useAuth0();
 
   useEffect(() => {
       
@@ -311,7 +311,7 @@ export const Dashboard = () => {
                                       flexDirection: "column"}} >
             <Typography variant="h5">Todays Workout</Typography>
             {/* <h1>Your current routine</h1> */}
-            {/* <div className='flex'><RoutineTable days={dayOfWeek}></RoutineTable></div> */}
+            <div className='flex'><RoutineTable days={dayOfWeek}></RoutineTable></div>
           </Paper>
         </Grid>
         <Grid item xs={12}>
