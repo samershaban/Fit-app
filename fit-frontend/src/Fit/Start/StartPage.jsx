@@ -334,13 +334,17 @@ export const StartPage = () => {
     {isAuthenticated ? (
       <>
         <p>Go to my dashboard</p>
-        <Link type="button" className="btn main-color btn-lg text-white" to="/dashboard" style={{marginBottom: "8px"}}>Dashboard</Link>
+        <Button variant="contained" component={Link} to="/dashboard" disableElevation sx={{ mb: 1 }}>
+          Dashboard
+        </Button>
       </>
-    ):(
+    ) : (
       <>
         {error && <p>Error: {error.message}</p>}
         <p>Login to save data</p>
-        <Link type="button" className="btn main-color btn-lg text-white" onClick={login} style={{marginBottom: "8px"}}>Login</Link>
+        <Button variant="contained" onClick={login} disableElevation sx={{ mb: 1 }}>
+          Login
+        </Button>
       </>
     )}
       

@@ -1,21 +1,35 @@
-import { Link } from "react-router-dom";
+import { Box, Typography } from '@mui/material';
+import { NavLink } from 'react-router-dom';
+
+const linkStyle = {
+  fontSize: 13,
+  fontWeight: 500,
+  color: '#64748b',
+  textDecoration: 'none',
+};
 
 export const Footer = () => {
   return (
-    <div className="main-color">
-      <footer className="container d-flex flex-wrap 
-      justify-content-between align-items-center py-5 main-color">
-        <p className="col-md-4 mb-0 text-white">Fit App</p>
-        <ul className="nav navbar-dark  col-md-4 justify-content-end">
-          <li className="nav-item">
-            <Link className="nav-link px-2 text-white" to="/dashboard">
-              Dashboard
-            </Link>
-          </li>
-          <li className="nav-item">
-          </li>
-        </ul>
-      </footer>
-    </div>
+    <Box
+      component="footer"
+      sx={{
+        bgcolor: 'white',
+        borderTop: '1px solid',
+        borderColor: 'divider',
+        px: { xs: 2, md: 4 },
+        py: 2,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}
+    >
+      <Typography sx={{ fontWeight: 800, color: 'primary.main', fontSize: 15, letterSpacing: '-0.3px' }}>
+        Fit App
+      </Typography>
+      <Box sx={{ display: 'flex', gap: 1 }}>
+        <NavLink to="/dashboard" style={linkStyle}>Dashboard</NavLink>
+        <NavLink to="/routine" style={linkStyle}>Routine</NavLink>
+      </Box>
+    </Box>
   );
-}
+};
