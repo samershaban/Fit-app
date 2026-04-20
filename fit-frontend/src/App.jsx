@@ -1,5 +1,8 @@
 import React from 'react';
 import { Redirect, Route, Switch, useHistory } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from './theme';
 import './App.css';
 import { Footer } from './Fit/Footer';
 import { Navbar } from './Fit/Navbar';
@@ -54,10 +57,9 @@ function App() {
   };
 
   return (
-    <div className='d-flex flex-column min-vh-100'>
-      {/* <Security oktaAuth={oktaAuth}
-        restoreOriginalUri={restoreOriginalUri}
-        onAuthRequired={customAuthHandler}> */}
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <div className='d-flex flex-column min-vh-100'>
         <Navbar/>
         <div className='flex-grow-1'>
           <Switch>
@@ -68,32 +70,11 @@ function App() {
             <Route path="/account" exact component={Account} />
             <Route path="/calendar" exact component={Calendar} />
             <Route path="*" component={StartPage} />
-            {/* <Route path='/' exact>
-              <Redirect to='start'/>
-            </Route>
-            <Route path='/start'>
-              <StartPage/>
-            </Route>
-            <Route path='/routine'>
-              <Routine options={true}/>
-            </Route>
-            <Route path='/dashboard'>
-              <Dashboard/>
-            </Route>
-            <Route path='/account'>
-              <Account/>
-            </Route>
-            <Route path='/calendar'>
-              <Calendar/>
-            </Route> */}
-            {/* <SecureRoute path='/home'> <HomePage/> </SecureRoute> */}
-            {/* <Route path="/login/callback" render={(props) => <LoginCallback {...props} onAuthResume={onAuthResume} />} /> */}
-            {/* <Route path="/login" render={() => <LoginWidget />} /> */}
           </Switch>
         </div>
         <Footer/>
-      {/* </Security> */}
-    </div>
+      </div>
+    </ThemeProvider>
   );
 }
 
