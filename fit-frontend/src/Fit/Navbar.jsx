@@ -1,70 +1,98 @@
-// import { useOktaAuth } from "@okta/okta-react";
-import { Link, NavLink } from "react-router-dom";
-import { SpinnerLoading } from "../utils/SpinnerLoading";
-import { useAuth0 } from "@auth0/auth0-react";
+import { AppBar, Box, Button, Toolbar, Typography } from '@mui/material';
+import { NavLink } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
+
+const navLinkStyle = {
+  padding: '6px 13px',
+  borderRadius: 7,
+  fontSize: 13,
+  fontWeight: 500,
+  color: '#64748b',
+  textDecoration: 'none',
+  display: 'inline-block',
+};
+
+const activeLinkStyle = {
+  background: '#eff6ff',
+  color: '#3b82f6',
+  fontWeight: 600,
+};
+
 export const Navbar = () => {
-  const {
-    isLoading, // Loading state, the SDK needs to reach Auth0 on load
-    isAuthenticated,
-    error,
-    loginWithRedirect: login, // Starts the login flow
-    logout: auth0Logout, // Starts the logout flow
-    user, // User profile
-  } = useAuth0();
+  const { isAuthenticated, logout: auth0Logout, user } = useAuth0();
 
-  // const { oktaAuth, authState } = useOktaAuth();
+  const handleLogout = () =>
+    auth0Logout({ logoutParams: { returnTo: window.location.origin } });
 
-  // if(!authState) {
-  //   return <SpinnerLoading/>
-  // }
-
-  const handleLogout = () => auth0Logout({ logoutParams: { returnTo: window.location.origin } });
-
-  // console.log(authState);// prints token to the screen when you sign in
+  const initial = user?.name?.charAt(0).toUpperCase() ?? 'U';
 
   return (
-    <nav className='navbar navbar-expand-lg navbar-dark main-color py-3'>
-      <div className='container-fluid'>
-        <span className='navbar-brand'>Fit App</span>
-        <button className='navbar-toggler' type='button'
-          data-bs-toggle='collapse' data-bs-target='#navbarNavDropdown'
-          aira-controls='navbarNavDropdown' aria-expanded='false'
-          aria-label='Toggle Navigation'
+    <AppBar
+      position="sticky"
+      color="inherit"
+      elevation={0}
+      sx={{
+        borderBottom: '1px solid',
+        borderColor: 'divider',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.06)',
+      }}
+    >
+      <Toolbar sx={{ gap: 0.5, minHeight: 56 }}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: 800, color: 'primary.main', letterSpacing: '-0.5px', mr: 3 }}
         >
-          <span className='navbar-toggler-icon'></span>
-        </button>
-        <div className='collapse navbar-collapse' id='navbarNavDropdown'>
-          <ul className='navbar-nav'>
-            {isAuthenticated && 
-            <li className="nav-item">
-              <NavLink className='nav-link' to='/dashboard'>Dashboard</NavLink>
-            </li>
-            }
-            <li className='nav-item'>
-              <NavLink className='nav-link' to='/routine'>Routine</NavLink>
-            </li>
-            {isAuthenticated && <>
-            <li className="nav-item">
-              <NavLink className='nav-link' to='/calendar'>Calendar</NavLink>
-            </li>
-            <li className="nav-item">
-              <NavLink className='nav-link' to='/account'>Account</NavLink>
-            </li>
-            </>}
-          </ul>
-          <ul className='navbar-nav ms-auto'>
-            {!isAuthenticated ?
-              <li className='nav-item m-1'>
-                <Link type='button' className='btn btn-outline-light' onClick={login}>Sign in</Link>
-              </li>
-              :
-              <li className='nav-item m-1'>
-                <button className="btn btn-outline-light" onClick={handleLogout}>Logout</button>
-              </li>
-            }
-          </ul>
-        </div>
-      </div>
-    </nav>
+          Fit App
+        </Typography>
+
+        <Box sx={{ display: 'flex', gap: 0.5, flexGrow: 1 }}>
+          {isAuthenticated && (
+            <NavLink to="/dashboard" style={navLinkStyle} activeStyle={activeLinkStyle}>
+              Dashboard
+            </NavLink>
+          )}
+          <NavLink to="/routine" style={navLinkStyle} activeStyle={activeLinkStyle}>
+            Routine
+          </NavLink>
+          {isAuthenticated && (
+            <>
+              <NavLink to="/calendar" style={navLinkStyle} activeStyle={activeLinkStyle}>
+                Calendar
+              </NavLink>
+              <NavLink to="/account" style={navLinkStyle} activeStyle={activeLinkStyle}>
+                Account
+              </NavLink>
+            </>
+          )}
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          {isAuthenticated && (
+            <Box sx={{
+              width: 34, height: 34, borderRadius: '50%',
+              background: 'linear-gradient(135deg, #3b82f6, #6366f1)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: 'white', fontSize: 13, fontWeight: 700,
+            }}>
+              {initial}
+            </Box>
+          )}
+          {!isAuthenticated ? (
+            <Button variant="outlined" size="small" component={NavLink} to="/login">
+              Sign in
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              size="small"
+              onClick={handleLogout}
+              sx={{ color: 'text.secondary', borderColor: 'divider' }}
+            >
+              Logout
+            </Button>
+          )}
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
-}
+};
