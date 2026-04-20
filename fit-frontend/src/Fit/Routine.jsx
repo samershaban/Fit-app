@@ -1,210 +1,125 @@
-import React, { useEffect, useRef, useState } from 'react';
-// import { useOktaAuth } from "@okta/okta-react";
-import { Link } from "react-router-dom"
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { Button, Container, Grid, LinearProgress, Paper, Table, TableBody, TableContainer, TableHead, TableRow } from '@mui/material';
-import TableCell from '@mui/material/TableCell';
-import { app_url } from "../config/config";
-import { useAuth0 } from "@auth0/auth0-react";
-import './Start/Finished.css';
+import {
+  Box, Grid, Paper, Typography, Button,
+  Table, TableBody, TableCell, TableHead, TableRow, Chip,
+} from '@mui/material';
+import { app_url } from '../config/config';
+import { useAuth0 } from '@auth0/auth0-react';
 
-const steps = ['Goals', 'Basic Info', 'sRoutine'];
+const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
-// Main Component
-export const Routine = ({options, loggedIn}) => {
+export const Routine = ({ options }) => {
+  const { isAuthenticated, getAccessTokenSilently } = useAuth0();
 
-  // const { authState } = useOktaAuth();
-  const[routine, setRoutine] = useState({});
-  // const app_url = 'http://localhost:8080';
-  // const app_url = 'https://react-fit-app-631cc6edc570.herokuapp.com';
-  
-  const {
-    isLoading, // Loading state, the SDK needs to reach Auth0 on load
-    isAuthenticated,
-    error,
-    loginWithRedirect: login, // Starts the login flow
-    logout: auth0Logout, // Starts the logout flow
-    user, // User profile
-    getAccessTokenSilently
-  } = useAuth0();
+  const [rows, setRows] = useState([[], [], [], [], []]);
 
-  let loaded = false;
-  function createData(wrkt, sets) {
-    return { wrkt, sets };
-  }
-  const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
-  let strength = false;
-  const [rows, setRows] = useState([
-    [],
-    [],
-    [],
-    [],
-    []
-  ]);
-  
-  const getNewCustomRoutine = async ( token) => {
-      const url = `${app_url}/api/routines/generate`;
-      const requestOptions = {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        type:"strength",daysPerWeek:3,goal:"muscle_gain",experience:"beginner",exerciseId:2
-      };
-      axios.post(url, requestOptions)
-      .then((res) =>{
-        console.log(res.data);
-      }).catch(err => {
-        console.log(err);
-      })
-  }
-
-  const fetchRoutine = async (token) => {
-  // console.log(authState);
-  
-    if (isAuthenticated) {
-      const url = `${app_url}/api/workout/byUserEmail`;
-      const requestOptions = {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        }
-      };
-      axios.get(url, requestOptions)
-      .then((res) =>{
-        let wr = JSON.parse(res.data.workout);
-        console.log("routine:",wr);
-        
-        for(let d=0;d<wr.DailyRoutines.length;d++) {
-          for(let i=0;i<wr.DailyRoutines[d].routine.length;i++) {
-            rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
-            // console.log(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
-            // try to mutate array to force a rerender
-          }
-        }
-        setRoutine(res.data.workout);
-      }).catch(err => {
-        console.log(err);
-      })
-    }
-  }
-
-  const getLocalRoutine = () => {
-    let wr = JSON.parse(localStorage.getItem('workout'));
-      for(let d=0;d<wr.DailyRoutines.length;d++) {
-        for(let i=0;i<wr.DailyRoutines[d].routine.length;i++) {
-          rows[d].push(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
-          // console.log(createData(wr.DailyRoutines[d].routine[i].name, strength? '3x3-5': '3x8-12'));
-          // try to mutate array to force a rerender
-        }
-      }
-      setRoutine(wr);
-  }
-
-  // useEffect(() => {
-  //   const getToken = async () => {
-  //     try {
-  //       const token = await getAccessTokenSilently();
-  //       console.log("token:", token);
-  //       // this.token = token;
-  //       fetchRoutine(token);
-  //     } catch (e) {
-  //       console.log(e.message);
-  //     }
-  //   }
-  //   getToken();
-
-  //   // // getNewCustomRoutine();
-  //   // // if not logged in and has local storage
-  //   // if(!isAuthenticated && localStorage.getItem('workout')) {
-  //   //   getLocalRoutine();
-  //   //   loaded = true;
-  //   // // if logged in
-  //   // } else if(isAuthenticated) {
-  //   //   if(localStorage.getItem('workout'))
-  //   //     getLocalRoutine();
-  //   //   else
-  //   //     fetchRoutine();
-  //   //   loaded = true;
-  //   // } else {
-  //   //   console.log('workout empty:'+ authState);
-  //   // }
-  // },[]);
+  const parseRows = (wr) => {
+    const parsed = (wr.DailyRoutines || []).map(day =>
+      (day.routine || []).map(ex => ({ wrkt: ex.name, sets: '3×8–12' }))
+    );
+    while (parsed.length < 5) parsed.push([]);
+    return parsed;
+  };
 
   useEffect(() => {
-    
-    const getToken = async () => {
+    const load = async () => {
       try {
         const token = await getAccessTokenSilently();
-        console.log("token:", token);
-        // this.token = token;
-        fetchRoutine(token);
+        const res = await axios.get(`${app_url}/api/workout/byUserEmail`, {
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+        });
+        setRows(parseRows(JSON.parse(res.data.workout)));
       } catch (e) {
         console.log(e.message);
       }
-    }
-    getToken();
-  }, [isAuthenticated])// not sure if will work
+    };
+    load();
+  }, [isAuthenticated]);
 
- const tables = rows.map((row, i) => (
-  <div className='item'>
-    <TableContainer 
-      sx={{ maxWidth: 300 }}
-      component={Paper} elevation={3} style={{height: "100%",
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "space-between",}}
-    >
-      <Table sx={{  }} size="small" aria-label="a dense table">
-        <TableHead>
-          <TableRow>
-            <TableCell>{daysOfWeek[i]}</TableCell>
-            <TableCell align="right">Sets</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {row.map((r, i) => (
-            <TableRow
-              key={i}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {r.wrkt}
-              </TableCell>
-              <TableCell align="right">{r.sets}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  </div>
-))
+  return (
+    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', py: 4, px: { xs: 2, md: 4 } }}>
 
-  return(
-    <div className="container mt-3">
-      <h1>Your current routine</h1>
-      <div className='flex'>{tables}</div>
-      {/* {JSON.stringify(routine)} */}
-      {options===true && <>
-      {isAuthenticated?
-      <>
-        <p>Go to my dashboard</p>
-        <Link type="button" className="btn main-color btn-lg text-white" to="/dashboard">Dashboard</Link>
-      </>:
-      <>
-        <p>Login to save data</p>
-        <Link type="button" className="btn main-color btn-lg text-white" to="/login">Login</Link>
-      </>
-      }
-      <p>Create routine</p>
-        <Link type="button" className="btn main-color btn-lg text-white" to="/start"
-          style={{marginBottom: "8px"}}
-        >
-          Start
-        </Link>
-      </>}
-    </div>
-  )
-}
+      <Box sx={{ mb: 3 }}>
+        <Typography variant="h5" sx={{ fontWeight: 800, color: 'text.primary', letterSpacing: '-0.5px' }}>
+          Your Routine
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+          Monday – Friday workout plan
+        </Typography>
+      </Box>
+
+      <Grid container spacing={2}>
+        {WEEKDAYS.map((day, i) => (
+          <Grid item xs={12} sm={6} md={4} lg={2.4} key={day}>
+            <Paper sx={{ p: 2.5, height: '100%' }}>
+
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mb: 1.5 }}>
+                <Box sx={{ width: 7, height: 7, borderRadius: '50%', bgcolor: 'primary.main' }} />
+                <Typography sx={{ fontSize: 10, fontWeight: 700, letterSpacing: '1.2px', color: 'primary.main', textTransform: 'uppercase' }}>
+                  {day}
+                </Typography>
+              </Box>
+
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 700, color: 'text.secondary', fontSize: 11, px: 0 }}>
+                      Exercise
+                    </TableCell>
+                    <TableCell align="right" sx={{ fontWeight: 700, color: 'text.secondary', fontSize: 11, px: 0 }}>
+                      Sets
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {rows[i].length > 0 ? rows[i].map((r, j) => (
+                    <TableRow key={j} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                      <TableCell component="th" scope="row" sx={{ px: 0, fontSize: 12 }}>
+                        {r.wrkt}
+                      </TableCell>
+                      <TableCell align="right" sx={{ px: 0, fontSize: 12, color: 'text.secondary' }}>
+                        {r.sets}
+                      </TableCell>
+                    </TableRow>
+                  )) : (
+                    <TableRow>
+                      <TableCell colSpan={2} sx={{ px: 0, color: 'text.secondary', fontSize: 12, border: 0 }}>
+                        No exercises
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </Paper>
+          </Grid>
+        ))}
+      </Grid>
+
+      {options === true && (
+        <Box sx={{ mt: 3, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
+          {isAuthenticated ? (
+            <>
+              <Typography variant="body2" color="text.secondary">Go to your dashboard</Typography>
+              <Button variant="contained" component={Link} to="/dashboard" disableElevation sx={{ alignSelf: 'flex-start' }}>
+                Dashboard
+              </Button>
+            </>
+          ) : (
+            <>
+              <Typography variant="body2" color="text.secondary">Login to save your data</Typography>
+              <Button variant="contained" component={Link} to="/login" disableElevation sx={{ alignSelf: 'flex-start' }}>
+                Login
+              </Button>
+            </>
+          )}
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>Create a new routine</Typography>
+          <Button variant="outlined" component={Link} to="/start" sx={{ alignSelf: 'flex-start' }}>
+            Start
+          </Button>
+        </Box>
+      )}
+    </Box>
+  );
+};
