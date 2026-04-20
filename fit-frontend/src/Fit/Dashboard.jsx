@@ -7,8 +7,9 @@ import {
   InputAdornment, Chip,
 } from "@mui/material";
 import { app_url } from "../config/config";
-import { RoutineTable } from "./RoutineTable";
 import { useAuth0 } from "@auth0/auth0-react";
+
+const WEEKDAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
 export const Dashboard = () => {
   const [weights, setWeights] = useState([]);
@@ -16,6 +17,7 @@ export const Dashboard = () => {
   const [weightData, setWeightData] = useState([]);
   const [weightAxis, setWeightAxis] = useState([]);
   const [tokenState, setTokenState] = useState(null);
+  const [todayExercises, setTodayExercises] = useState([]);
 
   const chartContainerRef = useRef(null);
   const [chartWidth, setChartWidth] = useState(400);
@@ -25,13 +27,9 @@ export const Dashboard = () => {
   const dayOfWeek = days[today.getDay()];
   const formattedDate = today.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
   const greeting = today.getHours() < 12 ? 'Good morning' : today.getHours() < 18 ? 'Good afternoon' : 'Good evening';
+  const dayIndex = WEEKDAYS.indexOf(dayOfWeek);
 
-  const {
-    isAuthenticated,
-    user,
-    getAccessTokenSilently,
-  } = useAuth0();
-
+  const { isAuthenticated, user, getAccessTokenSilently } = useAuth0();
   const firstName = user?.name?.split(' ')[0] ?? 'there';
 
   useEffect(() => {
@@ -40,6 +38,7 @@ export const Dashboard = () => {
         const token = await getAccessTokenSilently();
         setTokenState(token);
         fetchWeights(token);
+        fetchWorkout(token);
       } catch (e) {
         console.log(e.message);
       }
@@ -56,23 +55,43 @@ export const Dashboard = () => {
     return () => observer.disconnect();
   }, []);
 
-  const fetchWeights = async (token) => {
-    if (isAuthenticated) {
-      const url = `${app_url}/api/weights/byUserEmail`;
-      axios.get(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }).then((res) => {
-        const sorted = res.data.sort((a, b) => a.date.localeCompare(b.date));
-        setWeights(sorted);
-        setWeightData(sorted.map(w => w.value));
-        setWeightAxis(sorted.map(w => new Date(w.date)));
-      }).catch(err => {
-        console.log(err);
-      });
+  const parseExercisesForDay = (wr, index) => {
+    if (index < 0 || !wr?.DailyRoutines?.[index]) return [];
+    return wr.DailyRoutines[index].routine.map(ex => ({
+      name: ex.name,
+      sets: '3×8–12',
+    }));
+  };
+
+  const fetchWorkout = async (token) => {
+    if (dayIndex < 0) return;
+    const local = localStorage.getItem('workout');
+    if (local) {
+      setTodayExercises(parseExercisesForDay(JSON.parse(local), dayIndex));
+      return;
     }
+    if (!isAuthenticated) return;
+    try {
+      const res = await axios.get(`${app_url}/api/workout/byUserEmail`, {
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      });
+      const wr = JSON.parse(res.data.workout);
+      setTodayExercises(parseExercisesForDay(wr, dayIndex));
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  const fetchWeights = async (token) => {
+    if (!isAuthenticated) return;
+    axios.get(`${app_url}/api/weights/byUserEmail`, {
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+    }).then((res) => {
+      const sorted = res.data.sort((a, b) => a.date.localeCompare(b.date));
+      setWeights(sorted);
+      setWeightData(sorted.map(w => w.value));
+      setWeightAxis(sorted.map(w => new Date(w.date)));
+    }).catch(err => console.log(err));
   };
 
   const handleChangeWeight = (e) => {
@@ -81,20 +100,12 @@ export const Dashboard = () => {
   };
 
   const addWeight = () => {
-    const url = `${app_url}/api/weights/byUserEmail`;
     axios({
       method: 'POST',
-      url,
-      headers: {
-        Authorization: `Bearer ${tokenState}`,
-        'Content-Type': 'application/json',
-      },
+      url: `${app_url}/api/weights/byUserEmail`,
+      headers: { Authorization: `Bearer ${tokenState}`, 'Content-Type': 'application/json' },
       data: { value: weight, date: Date.now() },
-    }).then(() => {
-      fetchWeights(tokenState);
-    }).catch(err => {
-      console.log(err);
-    });
+    }).then(() => fetchWeights(tokenState)).catch(err => console.log(err));
   };
 
   return (
@@ -152,10 +163,7 @@ export const Dashboard = () => {
               </Button>
             </Box>
 
-            <Box
-              ref={chartContainerRef}
-              sx={{ bgcolor: '#f8fafc', borderRadius: 2, p: 1.5, overflow: 'hidden' }}
-            >
+            <Box ref={chartContainerRef} sx={{ bgcolor: '#f8fafc', borderRadius: 2, p: 1.5, overflow: 'hidden' }}>
               <Typography sx={{ fontSize: 11, fontWeight: 600, color: 'text.secondary', mb: 1 }}>
                 Last {weightData.length} entries
               </Typography>
@@ -200,20 +208,53 @@ export const Dashboard = () => {
               size="small"
               sx={{
                 bgcolor: '#f0fdf4', color: 'success.main', fontWeight: 700,
-                border: '1px solid #bbf7d0', mb: 1.5, fontSize: 11, alignSelf: 'flex-start',
+                border: '1px solid #bbf7d0', mb: 2, fontSize: 11, alignSelf: 'flex-start',
               }}
             />
 
-            <Box sx={{ flexGrow: 1, '& .container': { p: 0, m: 0 } }}>
-              <RoutineTable days={dayOfWeek} />
-            </Box>
+            {/* Exercise list */}
+            {todayExercises.length > 0 ? (
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, flexGrow: 1 }}>
+                {todayExercises.map((ex, i) => (
+                  <Box
+                    key={i}
+                    sx={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      px: 1.5, py: 1, bgcolor: '#f8fafc', borderRadius: 2,
+                      border: '1px solid #f1f5f9',
+                    }}
+                  >
+                    <Typography sx={{ fontSize: 13, fontWeight: 500, color: 'text.primary' }}>
+                      {ex.name}
+                    </Typography>
+                    <Box sx={{
+                      bgcolor: 'white', border: '1.5px solid #e2e8f0', borderRadius: 1.5,
+                      px: 1, py: 0.25, fontSize: 11, fontWeight: 700, color: 'text.secondary',
+                    }}>
+                      {ex.sets}
+                    </Box>
+                  </Box>
+                ))}
+              </Box>
+            ) : (
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: 4, gap: 1, flexGrow: 1 }}>
+                <Typography variant="body2" color="text.secondary">
+                  {dayIndex < 0 ? 'Rest day — enjoy the break! 🙌' : 'No routine set up yet.'}
+                </Typography>
+                {dayIndex >= 0 && (
+                  <Button variant="text" size="small" href="/start" sx={{ color: 'primary.main', fontWeight: 600 }}>
+                    Create one →
+                  </Button>
+                )}
+              </Box>
+            )}
 
             <Button
               variant="text"
               fullWidth
               href="/routine"
               sx={{
-                border: '1.5px dashed', borderColor: 'divider',
+                mt: 2, border: '1.5px dashed', borderColor: 'divider',
                 borderRadius: 2, color: 'text.secondary', fontWeight: 600, fontSize: 12,
               }}
             >
