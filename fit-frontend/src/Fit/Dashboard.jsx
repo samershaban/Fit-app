@@ -18,6 +18,7 @@ export const Dashboard = () => {
   const [weightAxis, setWeightAxis] = useState([]);
   const [tokenState, setTokenState] = useState(null);
   const [todayExercises, setTodayExercises] = useState([]);
+  const [routineExists, setRoutineExists] = useState(false);
 
   const chartContainerRef = useRef(null);
   const [chartWidth, setChartWidth] = useState(400);
@@ -38,9 +39,9 @@ export const Dashboard = () => {
 
   // Load workout from localStorage immediately on mount — no auth needed
   useEffect(() => {
-    if (dayIndex < 0) return;
     const local = localStorage.getItem('workout');
     if (local) {
+      setRoutineExists(true);
       setTodayExercises(parseExercisesForDay(JSON.parse(local), dayIndex));
     }
   }, []);
@@ -85,6 +86,7 @@ export const Dashboard = () => {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
       const wr = JSON.parse(res.data.workout);
+      setRoutineExists(true);
       setTodayExercises(parseExercisesForDay(wr, dayIndex));
     } catch (e) {
       console.log(e);
@@ -247,13 +249,19 @@ export const Dashboard = () => {
               </Box>
             ) : (
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: 4, gap: 1, flexGrow: 1 }}>
-                <Typography variant="body2" color="text.secondary">
-                  {dayIndex < 0 ? 'Rest day — enjoy the break! 🙌' : 'No routine set up yet.'}
-                </Typography>
-                {dayIndex >= 0 && (
-                  <Button variant="text" size="small" href="/start" sx={{ color: 'primary.main', fontWeight: 600 }}>
-                    Create one →
-                  </Button>
+                {routineExists ? (
+                  <Typography variant="body2" color="text.secondary">
+                    Rest day — enjoy the break! 🙌
+                  </Typography>
+                ) : (
+                  <>
+                    <Typography variant="body2" color="text.secondary">
+                      No routine set up yet.
+                    </Typography>
+                    <Button variant="text" size="small" href="/start" sx={{ color: 'primary.main', fontWeight: 600 }}>
+                      Create one →
+                    </Button>
+                  </>
                 )}
               </Box>
             )}
