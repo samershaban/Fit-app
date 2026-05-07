@@ -18,7 +18,6 @@ export const Dashboard = () => {
   const [weightAxis, setWeightAxis] = useState([]);
   const [tokenState, setTokenState] = useState(null);
   const [todayExercises, setTodayExercises] = useState([]);
-  const [routineExists, setRoutineExists] = useState(false);
 
   const chartContainerRef = useRef(null);
   const [chartWidth, setChartWidth] = useState(400);
@@ -37,18 +36,7 @@ export const Dashboard = () => {
   } = useAuth0();
   const firstName = user?.nickname?.split(' ')[0] ?? 'there';
 
-  // Load workout from localStorage immediately on mount — no auth needed
   useEffect(() => {
-    const local = localStorage.getItem('workout');
-    if (local) {
-      setRoutineExists(true);
-      setTodayExercises(parseExercisesForDay(JSON.parse(local), dayIndex));
-    }
-  }, []);
-
-  // Load weights and API workout when authenticated
-  useEffect(() => {
-    if (!isAuthenticated) return;
     const getToken = async () => {
       try {
         const token = await getAccessTokenSilently();
@@ -81,12 +69,17 @@ export const Dashboard = () => {
 
   const fetchWorkout = async (token) => {
     if (dayIndex < 0) return;
+    const local = localStorage.getItem('workout');
+    if (local) {
+      setTodayExercises(parseExercisesForDay(JSON.parse(local), dayIndex));
+      return;
+    }
+    if (!isAuthenticated) return;
     try {
       const res = await axios.get(`${app_url}/api/workout/byUserEmail`, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
       const wr = JSON.parse(res.data.workout);
-      setRoutineExists(true);
       setTodayExercises(parseExercisesForDay(wr, dayIndex));
     } catch (e) {
       console.log(e);
@@ -249,19 +242,13 @@ export const Dashboard = () => {
               </Box>
             ) : (
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', py: 4, gap: 1, flexGrow: 1 }}>
-                {routineExists ? (
-                  <Typography variant="body2" color="text.secondary">
-                    Rest day — enjoy the break! 🙌
-                  </Typography>
-                ) : (
-                  <>
-                    <Typography variant="body2" color="text.secondary">
-                      No routine set up yet.
-                    </Typography>
-                    <Button variant="text" size="small" href="/start" sx={{ color: 'primary.main', fontWeight: 600 }}>
-                      Create one →
-                    </Button>
-                  </>
+                <Typography variant="body2" color="text.secondary">
+                  {dayIndex < 0 ? 'No workout for the day' : 'No workout for the day'}
+                </Typography>
+                {dayIndex >= 0 && (
+                  <Button variant="text" size="small" href="/start" sx={{ color: 'primary.main', fontWeight: 600 }}>
+                    Create one →
+                  </Button>
                 )}
               </Box>
             )}
@@ -303,7 +290,7 @@ export const Dashboard = () => {
                 background: 'linear-gradient(135deg, #fef3c7, #fde68a)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24,
               }}>
-                🥗
+                🍱
               </Box>
             </Box>
           </Paper>

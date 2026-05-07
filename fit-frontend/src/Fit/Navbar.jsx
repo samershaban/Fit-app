@@ -19,10 +19,18 @@ const activeLinkStyle = {
 };
 
 export const Navbar = () => {
-  const { isAuthenticated, logout: auth0Logout, user } = useAuth0();
-
   const handleLogout = () =>
     auth0Logout({ logoutParams: { returnTo: window.location.origin } });
+
+  const {
+      isLoading, // Loading state, the SDK needs to reach Auth0 on load
+      isAuthenticated,
+      error,
+      loginWithRedirect: login, // Starts the login flow
+      logout: auth0Logout, // Starts the logout flow
+      user, // User profile
+      getAccessTokenSilently
+    } = useAuth0();
 
   const initial = user?.name?.charAt(0).toUpperCase() ?? 'U';
 
@@ -78,8 +86,11 @@ export const Navbar = () => {
             </Box>
           )}
           {!isAuthenticated ? (
-            <Button variant="outlined" size="small" component={NavLink} to="/login">
-              Sign in
+            // <Button variant="outlined" size="small" component={NavLink} to="/login">
+            //   Sign in
+            // </Button>
+            <Button variant="outlined" size="small" onClick={login} >
+              Login
             </Button>
           ) : (
             <Button
