@@ -36,7 +36,18 @@ export const Dashboard = () => {
   } = useAuth0();
   const firstName = user?.nickname?.split(' ')[0] ?? 'there';
 
+  // Load workout from localStorage immediately on mount — no auth needed
   useEffect(() => {
+    if (dayIndex < 0) return;
+    const local = localStorage.getItem('workout');
+    if (local) {
+      setTodayExercises(parseExercisesForDay(JSON.parse(local), dayIndex));
+    }
+  }, []);
+
+  // Load weights and API workout when authenticated
+  useEffect(() => {
+    if (!isAuthenticated) return;
     const getToken = async () => {
       try {
         const token = await getAccessTokenSilently();
@@ -69,12 +80,6 @@ export const Dashboard = () => {
 
   const fetchWorkout = async (token) => {
     if (dayIndex < 0) return;
-    const local = localStorage.getItem('workout');
-    if (local) {
-      setTodayExercises(parseExercisesForDay(JSON.parse(local), dayIndex));
-      return;
-    }
-    if (!isAuthenticated) return;
     try {
       const res = await axios.get(`${app_url}/api/workout/byUserEmail`, {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },

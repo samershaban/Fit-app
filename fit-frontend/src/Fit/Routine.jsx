@@ -24,6 +24,12 @@ export const Routine = ({ options }) => {
   };
 
   useEffect(() => {
+    const local = localStorage.getItem('workout');
+    if (local) {
+      setRows(parseRows(JSON.parse(local)));
+      return;
+    }
+
     const load = async () => {
       try {
         const token = await getAccessTokenSilently();
@@ -35,7 +41,8 @@ export const Routine = ({ options }) => {
         console.log(e.message);
       }
     };
-    load();
+
+    if (isAuthenticated) load();
   }, [isAuthenticated]);
 
   return (
